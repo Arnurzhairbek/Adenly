@@ -1,7 +1,7 @@
 # Многоэтапная сборка для оптимизации размера образа
 
 # Этап 1: Сборка приложения
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -38,4 +38,3 @@ EXPOSE 80
 
 # Запускаем nginx
 CMD ["nginx", "-g", "daemon off;"]
-

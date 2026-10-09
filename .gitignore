@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Environment variables
 .env
@@ -52,7 +51,6 @@ lang-backend/uploads/*
 .cache/
 
 # Docker
-.dockerignore
 
 # Coverage
 coverage/
@@ -61,4 +59,3 @@ coverage/
 # Misc
 *.pem
 *.key
-
