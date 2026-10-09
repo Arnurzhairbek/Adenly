@@ -23,7 +23,7 @@ exports.validateRegister = [
     .isLength({ min: 6 })
     .withMessage("Пароль должен быть минимум 6 символов"),
   body("name")
-    .optional()
+    .isString()
     .trim()
     .isLength({ min: 2, max: 100 })
     .withMessage("Имя должно быть от 2 до 100 символов"),
@@ -77,4 +77,3 @@ exports.validateAchievements = [
     .withMessage("xp_to_add должен быть неотрицательным числом"),
   handleValidationErrors,
 ];
-

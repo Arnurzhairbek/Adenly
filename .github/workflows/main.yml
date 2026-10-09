@@ -1,42 +1,71 @@
-name: My First Workflow with Docker
+name: Adenly CI
 on:
   push:
-    branches: [ master ]
+    branches: [main, feature/import-adenly-source]
   pull_request:
-    branches: [ master ]
-
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  build:
+  frontend:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Run a simple command
-      run: echo "Hello from GitHub Actions!"
-      
-    - name: Show date
-      run: date
-      
-    - name: List files
-      run: ls -la
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-      
-    - name: Build Docker image
-      run: docker build -t myapp:latest .
-      
-    - name: Run Docker container
-      run: |
-        docker run -d --name myapp-container --restart unless-stopped myapp:latest
-        docker ps
-        
-    - name: Check container logs
-      run: docker logs myapp-container
-      
-    - name: Stop and remove container
-      run: |
-        docker stop myapp-container
-        docker rm myapp-container
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lang-frontend/package-lock.json
+      - run: npm ci
+        working-directory: lang-frontend
+      - run: npm run build
+        working-directory: lang-frontend
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-test-password
+          POSTGRES_DB: adently_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: ci-test-password
+      DB_NAME: adently_ci
+      JWT_SECRET: ci-only-not-a-production-secret-123456789
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lang-backend/package-lock.json
+      - run: npm ci
+        working-directory: lang-backend
+      - run: node scripts/check-syntax.cjs
+        working-directory: lang-backend
+      - name: Start backend and check HTTP API with PostgreSQL
+        working-directory: lang-backend
+        run: |
+          node --require ./scripts/mail-stub.cjs index.js > /tmp/adenly-backend.log 2>&1 &
+          backend_pid=$!
+          trap 'kill "$backend_pid" 2>/dev/null || true' EXIT
+          node scripts/api-smoke.cjs
+      - name: Backend logs
+        if: failure()
+        run: cat /tmp/adenly-backend.log
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - run: docker compose build

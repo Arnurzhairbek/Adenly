@@ -1,6 +1,5 @@
-module.exports = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: '⛔ Доступ запрещён. Только для админа.' });
-  }
+const authenticate = require('./authMiddleware');
+module.exports = (req, res, next) => authenticate(req, res, () => {
+  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
   next();
-};
+});

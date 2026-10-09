@@ -14,7 +14,7 @@ const router = express.Router();
    ✅ Регистрация + подтверждение Email
 ============================ */
 router.post("/register", validateRegister, async (req, res) => {
-  const { email, password, name, role } = req.body;
+  const { email, password, name } = req.body;
 
   try {
     // Проверяем, есть ли пользователь
@@ -30,13 +30,13 @@ router.post("/register", validateRegister, async (req, res) => {
       `INSERT INTO users (email, password, name, role, is_verified)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, email, name`,
-      [email, hashed, name || "", role || "user", false]
+      [email, hashed, name || "", "user", false]
     );
     const user = userRes.rows[0];
 
     // Токен подтверждения email
     const verifyToken = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, purpose: "verify-email" },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -45,13 +45,6 @@ router.post("/register", validateRegister, async (req, res) => {
     const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, ""); // Убираем trailing slash
     const verifyLink = `${frontendUrl}/verify-email/${verifyToken}`;
     
-    // Отладка: выводим используемый URL
-    logger.info("Email verification link generated", { 
-      frontendUrl, 
-      verifyLink,
-      hasEnvVar: !!process.env.FRONTEND_URL 
-    });
-
     // Отправляем письмо
     await sendMail(
       email,
@@ -89,6 +82,7 @@ router.get("/verify-email/:token", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.purpose !== "verify-email") return res.status(400).json({ message: "Invalid verification token" });
     const userRes = await pool.query("SELECT * FROM users WHERE id = $1", [decoded.id]);
     
     if (userRes.rows.length === 0) {
@@ -157,7 +151,7 @@ router.post("/login", validateLogin, async (req, res) => {
       return res.status(400).json({ message: "Неверный email или пароль" });
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, role: user.role, purpose: "access" },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -176,7 +170,7 @@ router.post("/login", validateLogin, async (req, res) => {
 /* ============================
    👤 Проверка токена
 ============================ */
-router.get("/me", async (req, res) => {
+router.get("/me", require("../middleware/authMiddleware"), async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader)
     return res.status(401).json({ message: "Нет токена" });
@@ -226,7 +220,7 @@ router.post("/forgot-password", async (req, res) => {
       return res.status(404).json({ message: "Пользователь не найден" });
 
     const user = userRes.rows[0];
-    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const resetToken = jwt.sign({ id: user.id, purpose: "reset-password" }, process.env.JWT_SECRET, { expiresIn: "15m" });
     // Используем переменную окружения для frontend URL или localhost по умолчанию
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const resetLink = `${frontendUrl}/reset-password/${resetToken}`;
@@ -261,6 +255,8 @@ router.post("/reset-password/:token", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.purpose !== "reset-password") return res.status(400).json({ message: "Invalid reset token" });
+    if (typeof newPassword !== "string" || newPassword.length < 6) return res.status(400).json({ message: "Password must have at least 6 characters" });
     const hashed = await bcrypt.hash(newPassword, 10);
 
     await pool.query("UPDATE users SET password = $1 WHERE id = $2", [hashed, decoded.id]);

@@ -4,20 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-// 🔹 Middleware для проверки токена
-function authMiddleware(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'Нет токена' });
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.status(401).json({ message: 'Недействительный токен' });
-  }
-}
+const authMiddleware = require('../middleware/authMiddleware');
 
 // 🔹 Получить все уведомления текущего пользователя
 router.get('/', authMiddleware, async (req, res) => {
@@ -48,8 +35,10 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
 });
 
 // 🔹 Создать уведомление (например, при достижении цели)
-router.post('/', async (req, res) => {
-  const { user_id, message, type } = req.body;
+router.post('/', authMiddleware, async (req, res) => {
+  const { message, type } = req.body;
+  const user_id = req.user.id;
+  if (typeof message !== "string" || !message.trim()) return res.status(400).json({ message: "Message is required" });
 
   try {
     await pool.query(

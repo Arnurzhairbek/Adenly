@@ -28,6 +28,7 @@ const aiConversationRoutes = require("./routes/aiConversation");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+let databaseReady = false;
 
 // === Trust proxy для работы за ngrok/reverse proxy ===
 app.set('trust proxy', 1);
@@ -285,10 +286,12 @@ try {
                 logger.warn("Ошибка при загрузке тестовых данных", { error: seedErr });
               }
     } else {
-      logger.warn("Файл init.sql не найден — пропуск инициализации таблиц");
+      throw new Error("Missing db/init.sql");
     }
+    databaseReady = true;
   } catch (err) {
     logger.error("Ошибка при инициализации таблиц", { error: err });
+    process.exit(1);
   }
 })();
 
@@ -320,8 +323,9 @@ app.get("/", (req, res) => {
 
 // === Health check ===
 app.get("/health", (req, res) => {
-  res.json({ 
-    status: "ok",
+  res.status(databaseReady ? 200 : 503).json({
+    databaseReady, 
+    status: databaseReady ? "ok" : "starting",
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });

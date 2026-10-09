@@ -1,7 +1,7 @@
 const rateLimit = require('express-rate-limit');
 
 // Определяем режим разработки (по умолчанию считаем dev, если не указано явно)
-const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+const isDevelopment = !process.env.NODE_ENV || ['development', 'test'].includes(process.env.NODE_ENV);
 
 // Общий лимит для всех запросов
 exports.generalLimiter = rateLimit({
@@ -30,4 +30,3 @@ exports.apiLimiter = rateLimit({
   max: isDevelopment ? 300 : 60, // В dev режиме больше запросов
   message: "Слишком много запросов, подождите немного",
 });
-

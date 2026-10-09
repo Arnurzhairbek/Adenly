@@ -15,7 +15,7 @@ const Course = lazy(() => import("./pages/Course"));
 const Exercise = lazy(() => import("./pages/Exercise"));
 const Progress = lazy(() => import("./pages/Progress"));
 const Achievements = lazy(() => import("./pages/Achievements"));
-const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const Leaderboard = lazy(() => import("./pages/LeaderBoard"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Login = lazy(() => import("./pages/Login"));
