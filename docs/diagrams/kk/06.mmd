@@ -1,0 +1,176 @@
+erDiagram
+    courses |o--o{ lessons : "course_id"
+    users |o--o{ notifications : "user_id"
+    users |o--o{ progress : "user_id"
+    courses |o--o{ progress : "course_id"
+    lessons |o--o{ progress : "lesson_id"
+    users |o--o{ achievements : "user_id"
+    courses |o--o{ tests : "course_id"
+    tests |o--o{ test_questions : "test_id"
+    test_questions |o--o{ test_answers : "question_id"
+    tests |o--o{ test_attempts : "test_id"
+    users |o--o{ test_attempts : "user_id"
+    test_attempts |o--o{ test_responses : "attempt_id"
+    test_questions |o--o{ test_responses : "question_id"
+    test_answers |o--o{ test_responses : "answer_id"
+    users |o--o{ certificates : "user_id"
+    courses |o--o{ certificates : "course_id"
+    tests |o--o{ certificates : "test_id"
+    users |o--o{ feedback : "user_id"
+    users |o--o{ user_errors : "user_id"
+    courses |o--o{ user_errors : "course_id"
+    lessons |o--o{ user_errors : "lesson_id"
+    users |o--o{ ai_conversations : "user_id"
+    courses |o--o{ ai_conversations : "course_id"
+    lessons |o--o{ ai_conversations : "lesson_id"
+    users {
+        serial id PK
+        varchar email UK
+        text password
+        varchar name
+        varchar role
+        boolean is_verified
+        timestamp created_at
+        jsonb settings
+    }
+    courses {
+        serial id PK
+        varchar title
+        text description
+        varchar language_from
+        varchar language_to
+        timestamp created_at
+    }
+    lessons {
+        serial id PK
+        integer course_id FK
+        varchar title
+        text content
+        varchar media_url
+        timestamp created_at
+    }
+    notifications {
+        serial id PK
+        integer user_id FK
+        text message
+        varchar type
+        boolean is_read
+        timestamp created_at
+    }
+    progress {
+        serial id PK
+        int user_id FK
+        int course_id FK
+        int lesson_id FK
+        boolean completed
+        varchar status
+        timestamp updated_at
+    }
+    achievements {
+        serial id PK
+        integer user_id FK
+        integer xp
+        integer level
+        integer lessons_completed
+        timestamp created_at
+        timestamp updated_at
+    }
+    tests {
+        serial id PK
+        integer course_id FK
+        varchar title
+        text description
+        integer passing_score
+        integer time_limit
+        integer max_attempts
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    test_questions {
+        serial id PK
+        integer test_id FK
+        text question_text
+        varchar question_type
+        integer points
+        integer order_index
+        timestamp created_at
+    }
+    test_answers {
+        serial id PK
+        integer question_id FK
+        text answer_text
+        boolean is_correct
+        integer order_index
+        timestamp created_at
+    }
+    test_attempts {
+        serial id PK
+        integer test_id FK
+        integer user_id FK
+        integer score
+        integer total_questions
+        integer correct_answers
+        timestamp started_at
+        timestamp completed_at
+        integer time_taken
+        boolean passed
+    }
+    test_responses {
+        serial id PK
+        integer attempt_id FK
+        integer question_id FK
+        integer answer_id FK
+        text user_answer
+        boolean is_correct
+        integer points_earned
+        timestamp created_at
+    }
+    certificates {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer test_id FK
+        varchar certificate_number UK
+        timestamp issued_at
+        timestamp expires_at
+        jsonb metadata
+        timestamp created_at
+    }
+    feedback {
+        serial id PK
+        integer user_id FK
+        varchar name
+        varchar email
+        varchar subject
+        text message
+        varchar category
+        varchar status
+        timestamp created_at
+    }
+    user_errors {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer lesson_id FK
+        varchar error_type
+        text error_text
+        text correct_text
+        text context
+        jsonb metadata
+        timestamp created_at
+    }
+    ai_conversations {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer lesson_id FK
+        varchar language
+        varchar topic
+        jsonb messages
+        jsonb metadata
+        integer duration_seconds
+        integer score
+        text feedback
+        timestamp created_at
+    }

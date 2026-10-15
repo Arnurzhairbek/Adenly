@@ -1,0 +1,308 @@
+<!doctype html><html lang="kk"><meta charset="utf-8"><title>Adenly диаграммалары</title><style>body{font-family:Arial;margin:32px;color:#182535}section{margin:35px 0;padding:24px;border:1px solid #ccc;overflow:auto}pre.mermaid{min-width:900px}p{max-width:1100px;line-height:1.6}@media print{section{break-before:page;border:0}button{display:none}}</style><h1>Adenly диаграммалары</h1><p>Қазақша нұсқа. IDEF модельдері Mermaid графикасына бейімделген. Диаграммаларды көрсету үшін CDN желісіне қолжетімділік қажет.</p><button onclick="window.print()">Басып шығару / PDF сақтау</button><section><h2>DFD — контекстік деңгей</h2><pre class="mermaid">flowchart LR
+ U[Пайдаланушы] --&gt;|Тіркелу деректері, оқу сұраулары, жауаптар, хабарлар| P((0. Adenly))
+ P --&gt;|Материалдар, нәтижелер, оқу барысы, сертификаттар, ЖИ жауаптары| U
+ A[Әкімші] --&gt;|Курстардың, сабақтардың және тесттердің деректері| P
+ P --&gt;|Мазмұнды басқару нәтижелері| A
+ P --&gt;|Хаттың мекенжайы мен мазмұны| M[Пошта қызметі]
+ M --&gt;|SMTP сұрауының нәтижесі| P
+ M --&gt;|Сілтемесі бар хат| U
+ P --&gt;|Мәнмәтін және хабар| G[Groq API]
+ G --&gt;|Модель жауабы| P
+</pre><p>Тік төртбұрыштар — сыртқы қатысушылар, дөңгелек — Adenly жүйесі. Көрсеткілер деректердің қозғалысын білдіреді. Фронтенд пен API жүйе шекарасына кіреді.</p></section><section><h2>DFD — бірінші деңгейдегі жіктеу</h2><pre class="mermaid">flowchart LR
+ U[Пайдаланушы] --&gt;|Email, құпиясөз, токен| P1((1. Тіркелгі))
+ P1 --&gt;|JWT, профиль, тексеру нәтижесі| U
+ P1 --&gt;|Жаңа тіркелгі, профильді өзгерту| D1[(D1 Пайдаланушылар)]
+ D1 --&gt;|Профиль және құпиясөз хеші| P1
+ P1 --&gt;|Растау немесе қалпына келтіру хаты| M[Пошта қызметі]
+ M --&gt;|SMTP күйі| P1
+ M --&gt;|Сілтеме| U
+ A[Әкімші] --&gt;|Мазмұн| P2((2. Каталог және сабақтар))
+ P2 --&gt;|Өзгерту нәтижесі| A
+ U --&gt;|Курс немесе сабақ сұрауы| P2
+ D2[(D2 Курстар мен сабақтар)] --&gt;|Материалдар| P2
+ P2 --&gt;|Мазмұн өзгерістері| D2
+ P2 --&gt;|Каталог және сабақтар| U
+ U --&gt;|Сабақты аяқтау| P3((3. Оқу барысы мен жетістіктер))
+ D3[(D3 Оқу барысы мен жетістіктер)] --&gt;|Ағымдағы көрсеткіштер| P3
+ P3 --&gt;|Жаңартылған көрсеткіштер| D3
+ P3 --&gt;|Оқу барысы, XP, деңгей| U
+ A --&gt;|Сұрақтар мен бағалау өлшемдері| P4((4. Тестілеу))
+ P4 --&gt;|Тест құру нәтижесі| A
+ U --&gt;|Тест сұрауы және жауаптар| P4
+ D4[(D4 Тесттер, сұрақтар, жауаптар, талпыныстар)] --&gt;|Тапсырмалар, жауап кілттері, тарих| P4
+ P4 --&gt;|Тесттер, талпыныстар және пайдаланушы жауаптары| D4
+ P4 --&gt;|Сұрақтар, баға, нәтиже| U
+ P4 --&gt;|Сертификат және хабарлама| D5[(D5 Сертификаттар мен хабарламалар)]
+ P4 --&gt;|XP ұпайларын қосу| D3
+ U --&gt;|Құжаттар мен хабарламалар сұрауы| P5((5. Құжаттар мен хабарламалар))
+ D5 --&gt;|Құжаттар мен хабарламалар| P5
+ P5 --&gt;|Оқылу күйі| D5
+ P5 --&gt;|Сертификаттар мен хабарламалар| U
+ U --&gt;|Хабар және қателерді талдау сұрауы| P6((6. ЖИ арқылы жаттығу))
+ D6[(D6 Қателер мен диалогтар)] --&gt;|Тарих және қателер| P6
+ P6 --&gt;|Тарих және қателер| D6
+ P6 --&gt;|Мәнмәтін және сұрау| G[Groq API]
+ G --&gt;|Модель жауабы| P6
+ P6 --&gt;|Диалог және ұсыныстар| U
+ U --&gt;|Өтініш| P7((7. Кері байланыс))
+ P7 --&gt;|Өтініш| D7[(D7 Кері байланыс)]
+ P7 --&gt;|Қабылдауды растау| U
+</pre><p>Дөңгелектер — үдерістер; цилиндрлер — PostgreSQL ішіндегі логикалық деректер қоймалары. Көрсеткі атаулары берілетін деректерді сипаттайды.</p></section><section><h2>IDEF1 — ақпараттық модель</h2><pre class="mermaid">flowchart LR
+ U[Пайдаланушы: жеке деректер, email, рөл, растау]
+ C[Курс: атауы, тілдер, сипаттама]
+ L[Сабақ: мазмұн және медиа]
+ P[Оқу барысы: сабақты меңгеру күйі]
+ T[Тест: бағалау өлшемдері мен шектеулер]
+ Q[Сұрақ және жауап нұсқалары]
+ AT[Талпыныс: тапсыру нәтижесі]
+ R[Пайдаланушы жауабы: таңдау немесе мәтін, ұпайлар]
+ CE[Сертификат: нөмірі мен берілген күні]
+ AC[Жетістіктер: XP, деңгей, сабақтар саны]
+ N[Хабарлама: мәтін және оқылуы]
+ E[Оқу қатесі: түрі, мәнмәтіні, түзетуі]
+ AI[ЖИ диалогы: тіл, хабарлар, баға]
+ F[Өтініш: байланыс деректері, тақырып, күй]
+ C --&gt;|біріктіреді| L
+ U --&gt;|оқу тарихы бар| P
+ L --&gt;|есепке алу нысаны| P
+ C --&gt;|арқылы тексеріледі| T
+ T --&gt;|қамтиды| Q
+ U --&gt;|орындайды| AT
+ T --&gt;|тапсырманы анықтайды| AT
+ AT --&gt;|қамтиды| R
+ Q --&gt;|мағынасын анықтайды| R
+ U --&gt;|алады| CE
+ C --&gt;|көрсетіледі| CE
+ T --&gt;|беруге негіз болады| CE
+ U --&gt;|жинақтайды| AC
+ U --&gt;|алады| N
+ U --&gt;|жібереді| E
+ U --&gt;|жүргізеді| AI
+ C --&gt;|мәнмәтін| E
+ L --&gt;|мәнмәтін| E
+ C --&gt;|мәнмәтін| AI
+ L --&gt;|мәнмәтін| AI
+ U --&gt;|авторы болуы мүмкін| F
+</pre><p>Модель ақпараттың мағынасы мен пәндік саладағы байланыстарды көрсетеді. SQL кілттері мен физикалық түрлер келтірілмейді. Курсқа жазылуға арналған жеке кесте жоқ. Сертификатта нақты талпынысқа сілтейтін attempt_id сыртқы кілті жоқ.</p></section><section><h2>IDEF2 — сұрауларды өңдеудің динамикалық моделі</h2><pre class="mermaid">flowchart LR
+ S[Көз: пайдаланушы әрекеттері, қарқындылық λ] --&gt; A[HTTP сұрауларының келуі]
+ A --&gt; L{Сұрау жиілігінің шегі}
+ L --&gt;|Шектен асты| X[HTTP 429]
+ L --&gt;|Рұқсат етілді| W[Node.js ішінде өңдеуді күту]
+ W --&gt; R{Сұрау түрі}
+ R --&gt;|Каталог, оқу барысы, тест| Q[PostgreSQL пулынан қосылымды күту]
+ Q --&gt; DB[SQL орындау: t_db уақыты]
+ DB --&gt; B[HTTP жауабын қалыптастыру]
+ R --&gt;|ЖИ диалогы| G[Groq API жауабын күту: t_ai уақыты]
+ G --&gt; Q
+ R --&gt;|Тіркелу| H[Құпиясөзді хештеу: t_hash уақыты]
+ H --&gt; Q2[PostgreSQL ішінде пайдаланушыны құру]
+ Q2 --&gt; M[Пошта қызметін күту: t_mail уақыты]
+ M --&gt; B
+ B --&gt; END[Сұрау аяқталды: T уақыты]
+</pre><p>Бұл — динамикалық модельдің сапалық жобасы; имитациялық модельдеу мен уақыт өлшемдері жүргізілген жоқ. Node.js ішіндегі күту жеке хабарлар брокерін білдірмейді. Өлшенетін параметрлер: λ — секундына келетін сұраулар; t_db — SQL уақыты; t_hash — хештеу уақыты; t_mail — пошта қызметін күту; t_ai — ЖИ жауабын күту; қосылым пулының өлшемі және сұраулардың түрлері бойынша үлесі. Нәтижелік көрсеткіштер: T жауап уақыты, өткізу қабілеті, күтіп тұрған сұраулар саны, 429 жауаптары мен қателер үлесі. Тәжірибелер: қалыпты жүктеме, сұраулардың күрт өсуі, баяу дерекқор, ЖИ кідірісі. Сандық мәндер тағайындалмаған.</p></section><section><h2>IDEF3 — оқу үдерісінің сипаттамасы</h2><pre class="mermaid">flowchart TD
+ S([Басталуы]) --&gt; A[UOB 1. Тіркелу деректерін жіберу]
+ A --&gt; J1{XOR: деректер дұрыс және email бос па?}
+ J1 --&gt;|Жоқ| E1[Деректерді түзету]
+ E1 --&gt; A
+ J1 --&gt;|Иә| B[UOB 2. Пайдаланушыны құру және хат жіберуді бастау]
+ B --&gt; C[UOB 3. Растау сілтемесіне өту]
+ C --&gt; J2{XOR: токен жарамды ма?}
+ J2 --&gt;|Жоқ| E2[Растау қабылданбады]
+ J2 --&gt;|Иә| D[UOB 4. Email мекенжайын растау]
+ D --&gt; E[UOB 5. Жүйеге кіру]
+ E --&gt; J3{XOR: кіруге рұқсат бар ма?}
+ J3 --&gt;|Жоқ| E
+ J3 --&gt;|Иә| F[UOB 6. Курсты таңдау және сабақты ашу]
+ F --&gt; G[UOB 7. Материалды оқу және оқу барысын сақтау]
+ G --&gt; H[UOB 8. Тестті бастауды сұрау]
+ H --&gt; J4{XOR: тест бар және талпыныстар шегі таусылмаған ба?}
+ J4 --&gt;|Жоқ| STOP[Тестті бастауға рұқсат берілмеді]
+ J4 --&gt;|Иә| I[UOB 9. Сұрақтарды алу және жауаптарды жіберу]
+ I --&gt; K[UOB 10. Талпынысты сақтау және бағаны есептеу]
+ K --&gt; J5{XOR: баға passing_score шегінен төмен емес пе?}
+ J5 --&gt;|Жоқ| FAIL[UOB 11. Нәтижені сертификатсыз көрсету]
+ FAIL --&gt; CH{XOR: қайталау керек пе?}
+ CH --&gt;|Иә| H
+ CH --&gt;|Жоқ| FIN([Аяқталуы])
+ J5 --&gt;|Иә| CERT[UOB 12. Сертификат құру]
+ CERT --&gt; XP[UOB 13. XP жаңартуға әрекет жасау]
+ XP --&gt; N[UOB 14. Хабарлама құруға әрекет жасау]
+ N --&gt; RES[UOB 15. Нәтиже мен сертификатты қайтару]
+ RES --&gt; FIN
+</pre><p>UOB — мінез-құлық бірлігі; көрсеткі — орындалу реттілігі; XOR — бір баламаны таңдау. HTTP және SQL қателерінің толық графы көрсетілмеген. Талпыныстар шегі GET /:testId/start кезінде тексеріледі; POST /:testId/submit оны қайта тексермейді. time_taken клиенттен келеді, started_at және completed_at жауап жіберілген сәтте жазылады. XP жаңарту немесе хабарлама құру қатесі сертификаттың берілуін жоймайды. XP үшін UPDATE қолданылады: achievements жазбасы болмаса, жаңа жазба құрылмайды.</p></section><section><h2>ER — PostgreSQL дерекқорының физикалық моделі</h2><pre class="mermaid">erDiagram
+    courses |o--o{ lessons : &quot;course_id&quot;
+    users |o--o{ notifications : &quot;user_id&quot;
+    users |o--o{ progress : &quot;user_id&quot;
+    courses |o--o{ progress : &quot;course_id&quot;
+    lessons |o--o{ progress : &quot;lesson_id&quot;
+    users |o--o{ achievements : &quot;user_id&quot;
+    courses |o--o{ tests : &quot;course_id&quot;
+    tests |o--o{ test_questions : &quot;test_id&quot;
+    test_questions |o--o{ test_answers : &quot;question_id&quot;
+    tests |o--o{ test_attempts : &quot;test_id&quot;
+    users |o--o{ test_attempts : &quot;user_id&quot;
+    test_attempts |o--o{ test_responses : &quot;attempt_id&quot;
+    test_questions |o--o{ test_responses : &quot;question_id&quot;
+    test_answers |o--o{ test_responses : &quot;answer_id&quot;
+    users |o--o{ certificates : &quot;user_id&quot;
+    courses |o--o{ certificates : &quot;course_id&quot;
+    tests |o--o{ certificates : &quot;test_id&quot;
+    users |o--o{ feedback : &quot;user_id&quot;
+    users |o--o{ user_errors : &quot;user_id&quot;
+    courses |o--o{ user_errors : &quot;course_id&quot;
+    lessons |o--o{ user_errors : &quot;lesson_id&quot;
+    users |o--o{ ai_conversations : &quot;user_id&quot;
+    courses |o--o{ ai_conversations : &quot;course_id&quot;
+    lessons |o--o{ ai_conversations : &quot;lesson_id&quot;
+    users {
+        serial id PK
+        varchar email UK
+        text password
+        varchar name
+        varchar role
+        boolean is_verified
+        timestamp created_at
+        jsonb settings
+    }
+    courses {
+        serial id PK
+        varchar title
+        text description
+        varchar language_from
+        varchar language_to
+        timestamp created_at
+    }
+    lessons {
+        serial id PK
+        integer course_id FK
+        varchar title
+        text content
+        varchar media_url
+        timestamp created_at
+    }
+    notifications {
+        serial id PK
+        integer user_id FK
+        text message
+        varchar type
+        boolean is_read
+        timestamp created_at
+    }
+    progress {
+        serial id PK
+        int user_id FK
+        int course_id FK
+        int lesson_id FK
+        boolean completed
+        varchar status
+        timestamp updated_at
+    }
+    achievements {
+        serial id PK
+        integer user_id FK
+        integer xp
+        integer level
+        integer lessons_completed
+        timestamp created_at
+        timestamp updated_at
+    }
+    tests {
+        serial id PK
+        integer course_id FK
+        varchar title
+        text description
+        integer passing_score
+        integer time_limit
+        integer max_attempts
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    test_questions {
+        serial id PK
+        integer test_id FK
+        text question_text
+        varchar question_type
+        integer points
+        integer order_index
+        timestamp created_at
+    }
+    test_answers {
+        serial id PK
+        integer question_id FK
+        text answer_text
+        boolean is_correct
+        integer order_index
+        timestamp created_at
+    }
+    test_attempts {
+        serial id PK
+        integer test_id FK
+        integer user_id FK
+        integer score
+        integer total_questions
+        integer correct_answers
+        timestamp started_at
+        timestamp completed_at
+        integer time_taken
+        boolean passed
+    }
+    test_responses {
+        serial id PK
+        integer attempt_id FK
+        integer question_id FK
+        integer answer_id FK
+        text user_answer
+        boolean is_correct
+        integer points_earned
+        timestamp created_at
+    }
+    certificates {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer test_id FK
+        varchar certificate_number UK
+        timestamp issued_at
+        timestamp expires_at
+        jsonb metadata
+        timestamp created_at
+    }
+    feedback {
+        serial id PK
+        integer user_id FK
+        varchar name
+        varchar email
+        varchar subject
+        text message
+        varchar category
+        varchar status
+        timestamp created_at
+    }
+    user_errors {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer lesson_id FK
+        varchar error_type
+        text error_text
+        text correct_text
+        text context
+        jsonb metadata
+        timestamp created_at
+    }
+    ai_conversations {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer lesson_id FK
+        varchar language
+        varchar topic
+        jsonb messages
+        jsonb metadata
+        integer duration_seconds
+        integer score
+        text feedback
+        timestamp created_at
+    }
+</pre><p>init.sql және ЖИ миграциясындағы барлық 15 кесте көрсетілген. users.settings API іске қосылғанда қосылады. PK — бастапқы кілт, FK — сыртқы кілт, UK — бірегей өріс. Бір ата-аналық жазбаға 0..N еншілес жазба сәйкес келеді. Барлық FK өрістерінде NULL рұқсат етілгендіктен, ата-аналық жақта 0..1 белгіленген. Құрама UNIQUE шектеулері: progress(user_id, lesson_id) және test_attempts(test_id, user_id, started_at). achievements.user_id бірегей емес. VARCHAR ұзындықтары, әдепкі мәндер және жою ережелері ықшамдық үшін көрсетілмеген. Кестелер мен бағандардың атаулары кодқа сәйкестігін сақтау үшін ағылшынша қалдырылған.</p></section><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'strict',maxTextSize:100000});</script></html>
