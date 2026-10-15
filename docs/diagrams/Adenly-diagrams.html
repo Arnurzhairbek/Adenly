@@ -1,0 +1,308 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Диаграммы Adenly</title><style>body{font-family:Arial;margin:32px;color:#182535}section{margin:35px 0;padding:24px;border:1px solid #ccc;overflow:auto}pre.mermaid{min-width:900px}p{max-width:1100px;line-height:1.6}@media print{section{break-before:page;border:0}button{display:none}}</style><h1>Диаграммы Adenly</h1><p>DFD, информационная модель IDEF1, качественная динамическая модель IDEF2, сценарий IDEF3 и физическая ER-модель. IDEF представлены в адаптированной графической записи Mermaid. Для отрисовки нужен доступ к CDN.</p><button onclick="window.print()">Печать / сохранить PDF</button><section><h2>DFD — контекстный уровень</h2><pre class="mermaid">flowchart LR
+ U[Пользователь] --&gt;|Регистрационные данные, запросы обучения, ответы, сообщения| P((0. Adenly))
+ P --&gt;|Материалы, результаты, прогресс, сертификаты, ответы AI| U
+ A[Администратор] --&gt;|Данные курсов, уроков и тестов| P
+ P --&gt;|Результаты управления контентом| A
+ P --&gt;|Адрес и содержание письма| M[Почтовый сервис]
+ M --&gt;|Результат SMTP-запроса| P
+ M --&gt;|Письмо со ссылкой| U
+ P --&gt;|Контекст и сообщение| G[Groq API]
+ G --&gt;|Ответ модели| P
+</pre><p>Потоки данных системы Adenly.</p></section><section><h2>DFD — декомпозиция первого уровня</h2><pre class="mermaid">flowchart LR
+ U[Пользователь] --&gt;|Email, пароль, токен| P1((1. Учетная запись))
+ P1 --&gt;|JWT, профиль, результат проверки| U
+ P1 --&gt;|Новая учетная запись, изменение профиля| D1[(D1 Пользователи)]
+ D1 --&gt;|Профиль и хеш пароля| P1
+ P1 --&gt;|Письмо подтверждения или сброса| M[Почтовый сервис]
+ M --&gt;|Статус SMTP| P1
+ M --&gt;|Ссылка| U
+ A[Администратор] --&gt;|Контент| P2((2. Каталог и уроки))
+ P2 --&gt;|Результат изменения| A
+ U --&gt;|Запрос курса или урока| P2
+ D2[(D2 Курсы и уроки)] --&gt;|Материалы| P2
+ P2 --&gt;|Изменения контента| D2
+ P2 --&gt;|Каталог и уроки| U
+ U --&gt;|Завершение урока| P3((3. Прогресс и достижения))
+ D3[(D3 Прогресс и достижения)] --&gt;|Текущие показатели| P3
+ P3 --&gt;|Обновленные показатели| D3
+ P3 --&gt;|Прогресс, XP, уровень| U
+ A --&gt;|Вопросы и критерии| P4((4. Тестирование))
+ P4 --&gt;|Результат создания теста| A
+ U --&gt;|Запрос теста и ответы| P4
+ D4[(D4 Тесты, вопросы, ответы, попытки)] --&gt;|Задания, ключи, история| P4
+ P4 --&gt;|Тесты, попытки и ответы пользователя| D4
+ P4 --&gt;|Вопросы, оценка, результат| U
+ P4 --&gt;|Сертификат и уведомление| D5[(D5 Сертификаты и уведомления)]
+ P4 --&gt;|Начисление XP| D3
+ U --&gt;|Запрос документов и уведомлений| P5((5. Документы и уведомления))
+ D5 --&gt;|Документы и уведомления| P5
+ P5 --&gt;|Статус прочтения| D5
+ P5 --&gt;|Сертификаты и уведомления| U
+ U --&gt;|Сообщение и запрос анализа ошибок| P6((6. AI-практика))
+ D6[(D6 Ошибки и диалоги)] --&gt;|История и ошибки| P6
+ P6 --&gt;|История и ошибки| D6
+ P6 --&gt;|Контекст и запрос| G[Groq API]
+ G --&gt;|Ответ модели| P6
+ P6 --&gt;|Диалог и рекомендации| U
+ U --&gt;|Обращение| P7((7. Обратная связь))
+ P7 --&gt;|Обращение| D7[(D7 Обратная связь)]
+ P7 --&gt;|Подтверждение приема| U
+</pre><p>Потоки данных системы Adenly.</p></section><section><h2>IDEF1 — информационная модель</h2><pre class="mermaid">flowchart LR
+ U[Пользователь: личность, email, роль, подтверждение]
+ C[Курс: название, языки, описание]
+ L[Урок: содержание и медиа]
+ P[Прогресс: состояние изучения урока]
+ T[Тест: критерии и ограничения]
+ Q[Вопрос и варианты ответа]
+ AT[Попытка: результат прохождения]
+ R[Ответ пользователя: выбор или текст, баллы]
+ CE[Сертификат: номер и дата выдачи]
+ AC[Достижения: XP, уровень, число уроков]
+ N[Уведомление: сообщение и прочтение]
+ E[Ошибка обучения: тип, контекст, исправление]
+ AI[AI-диалог: язык, сообщения, оценка]
+ F[Обращение: контакты, тема, статус]
+ C --&gt;|объединяет| L
+ U --&gt;|имеет историю обучения| P
+ L --&gt;|является объектом учета| P
+ C --&gt;|проверяется посредством| T
+ T --&gt;|содержит| Q
+ U --&gt;|выполняет| AT
+ T --&gt;|определяет задание для| AT
+ AT --&gt;|содержит| R
+ Q --&gt;|задает смысл| R
+ U --&gt;|получает| CE
+ C --&gt;|указан в| CE
+ T --&gt;|основание выдачи| CE
+ U --&gt;|накапливает| AC
+ U --&gt;|получает| N
+ U --&gt;|допускает| E
+ U --&gt;|ведет| AI
+ C --&gt;|контекст| E
+ L --&gt;|контекст| E
+ C --&gt;|контекст| AI
+ L --&gt;|контекст| AI
+ U --&gt;|может быть автором| F
+</pre><p>Модель показывает смысл информации и отношения предметной области, без физических ключей и типов SQL. Подписки/зачисления на курс отдельной сущностью в БД не представлены. Связь сертификата с конкретной попыткой логически возможна, но отдельного внешнего ключа attempt_id в коде нет.</p></section><section><h2>IDEF2 — динамическая модель обработки запросов</h2><pre class="mermaid">flowchart LR
+ S[Источник: действия пользователей, интенсивность λ] --&gt; A[Поступление HTTP-запросов]
+ A --&gt; L{Rate limit}
+ L --&gt;|Лимит превышен| X[HTTP 429]
+ L --&gt;|Разрешено| W[Ожидание обработки в Node.js]
+ W --&gt; R{Тип запроса}
+ R --&gt;|Каталог, прогресс, тест| Q[Ожидание соединения пула PostgreSQL]
+ Q --&gt; DB[Выполнение SQL: время t_db]
+ DB --&gt; B[Формирование HTTP-ответа]
+ R --&gt;|AI-диалог| G[Ожидание Groq API: время t_ai]
+ G --&gt; Q
+ R --&gt;|Регистрация| H[Хеширование пароля: время t_hash]
+ H --&gt; Q2[Создание пользователя в PostgreSQL]
+ Q2 --&gt; M[Ожидание почтового сервиса: время t_mail]
+ M --&gt; B
+ B --&gt; END[Запрос завершен: время T]
+</pre><p>Это качественная схема динамической модели, а не стандартная диаграмма состояний и не выполненная симуляция. Ожидание в Node.js обозначает планирование обработки, а не отдельный реализованный брокер сообщений. Параметры для измерения: λ (запросов/с), t_db, t_hash, t_mail, t_ai, размер пула БД, доли типов запросов и ограничения rate limit. Выходы: время ответа T, пропускная способность, число ожидающих запросов, доля 429 и ошибок. Эксперименты: обычная нагрузка, всплеск запросов, медленная БД, задержка AI. Числовые значения не назначались. Для обычного запроса T приблизительно равно сумме ожидания обработки, ожидания соединения, SQL и формирования ответа; это аналитическое приближение.</p></section><section><h2>IDEF3 — описание процесса обучения</h2><pre class="mermaid">flowchart TD
+ S([Начало]) --&gt; A[UOB 1. Отправить данные регистрации]
+ A --&gt; J1{XOR: данные допустимы и email свободен?}
+ J1 --&gt;|Нет| E1[Исправить данные]
+ E1 --&gt; A
+ J1 --&gt;|Да| B[UOB 2. Создать пользователя и инициировать отправку письма]
+ B --&gt; C[UOB 3. Перейти по ссылке подтверждения]
+ C --&gt; J2{XOR: токен действителен?}
+ J2 --&gt;|Нет| E2[Подтверждение отклонено]
+ J2 --&gt;|Да| D[UOB 4. Подтвердить email]
+ D --&gt; E[UOB 5. Выполнить вход]
+ E --&gt; J3{XOR: вход разрешен?}
+ J3 --&gt;|Нет| E
+ J3 --&gt;|Да| F[UOB 6. Выбрать курс и открыть урок]
+ F --&gt; G[UOB 7. Изучить материал и сохранить прогресс]
+ G --&gt; H[UOB 8. Запросить начало теста]
+ H --&gt; J4{XOR: тест существует и лимит попыток не достигнут?}
+ J4 --&gt;|Нет| STOP[Начало теста отклонено]
+ J4 --&gt;|Да| I[UOB 9. Получить вопросы и отправить ответы]
+ I --&gt; K[UOB 10. Сохранить попытку и рассчитать оценку]
+ K --&gt; J5{XOR: оценка не ниже passing_score?}
+ J5 --&gt;|Нет| FAIL[UOB 11. Показать результат без сертификата]
+ FAIL --&gt; CH{XOR: повторить?}
+ CH --&gt;|Да| H
+ CH --&gt;|Нет| FIN([Завершение])
+ J5 --&gt;|Да| CERT[UOB 12. Создать сертификат]
+ CERT --&gt; XP[UOB 13. Попытаться обновить XP]
+ XP --&gt; N[UOB 14. Попытаться создать уведомление]
+ N --&gt; RES[UOB 15. Вернуть результат и сертификат]
+ RES --&gt; FIN
+</pre><p>UOB — единица поведения, стрелки — предшествование, XOR — выбор одного пути. Диаграмма отражает штатный сценарий; полный граф исключений HTTP/SQL не показан. Проверка лимита попыток находится в GET /:testId/start; POST /:testId/submit повторно ее не выполняет. Время time_taken приходит от клиента; started_at и completed_at записываются при отправке ответов. Ошибки начисления XP и создания уведомления перехватываются отдельно и не отменяют успешную выдачу сертификата. Начисление XP использует UPDATE и не создает отсутствующую запись achievements.</p></section><section><h2>ER — физическая модель PostgreSQL</h2><pre class="mermaid">erDiagram
+    courses |o--o{ lessons : &quot;course_id&quot;
+    users |o--o{ notifications : &quot;user_id&quot;
+    users |o--o{ progress : &quot;user_id&quot;
+    courses |o--o{ progress : &quot;course_id&quot;
+    lessons |o--o{ progress : &quot;lesson_id&quot;
+    users |o--o{ achievements : &quot;user_id&quot;
+    courses |o--o{ tests : &quot;course_id&quot;
+    tests |o--o{ test_questions : &quot;test_id&quot;
+    test_questions |o--o{ test_answers : &quot;question_id&quot;
+    tests |o--o{ test_attempts : &quot;test_id&quot;
+    users |o--o{ test_attempts : &quot;user_id&quot;
+    test_attempts |o--o{ test_responses : &quot;attempt_id&quot;
+    test_questions |o--o{ test_responses : &quot;question_id&quot;
+    test_answers |o--o{ test_responses : &quot;answer_id&quot;
+    users |o--o{ certificates : &quot;user_id&quot;
+    courses |o--o{ certificates : &quot;course_id&quot;
+    tests |o--o{ certificates : &quot;test_id&quot;
+    users |o--o{ feedback : &quot;user_id&quot;
+    users |o--o{ user_errors : &quot;user_id&quot;
+    courses |o--o{ user_errors : &quot;course_id&quot;
+    lessons |o--o{ user_errors : &quot;lesson_id&quot;
+    users |o--o{ ai_conversations : &quot;user_id&quot;
+    courses |o--o{ ai_conversations : &quot;course_id&quot;
+    lessons |o--o{ ai_conversations : &quot;lesson_id&quot;
+    users {
+        serial id PK
+        varchar email UK
+        text password
+        varchar name
+        varchar role
+        boolean is_verified
+        timestamp created_at
+        jsonb settings
+    }
+    courses {
+        serial id PK
+        varchar title
+        text description
+        varchar language_from
+        varchar language_to
+        timestamp created_at
+    }
+    lessons {
+        serial id PK
+        integer course_id FK
+        varchar title
+        text content
+        varchar media_url
+        timestamp created_at
+    }
+    notifications {
+        serial id PK
+        integer user_id FK
+        text message
+        varchar type
+        boolean is_read
+        timestamp created_at
+    }
+    progress {
+        serial id PK
+        int user_id FK
+        int course_id FK
+        int lesson_id FK
+        boolean completed
+        varchar status
+        timestamp updated_at
+    }
+    achievements {
+        serial id PK
+        integer user_id FK
+        integer xp
+        integer level
+        integer lessons_completed
+        timestamp created_at
+        timestamp updated_at
+    }
+    tests {
+        serial id PK
+        integer course_id FK
+        varchar title
+        text description
+        integer passing_score
+        integer time_limit
+        integer max_attempts
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    test_questions {
+        serial id PK
+        integer test_id FK
+        text question_text
+        varchar question_type
+        integer points
+        integer order_index
+        timestamp created_at
+    }
+    test_answers {
+        serial id PK
+        integer question_id FK
+        text answer_text
+        boolean is_correct
+        integer order_index
+        timestamp created_at
+    }
+    test_attempts {
+        serial id PK
+        integer test_id FK
+        integer user_id FK
+        integer score
+        integer total_questions
+        integer correct_answers
+        timestamp started_at
+        timestamp completed_at
+        integer time_taken
+        boolean passed
+    }
+    test_responses {
+        serial id PK
+        integer attempt_id FK
+        integer question_id FK
+        integer answer_id FK
+        text user_answer
+        boolean is_correct
+        integer points_earned
+        timestamp created_at
+    }
+    certificates {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer test_id FK
+        varchar certificate_number UK
+        timestamp issued_at
+        timestamp expires_at
+        jsonb metadata
+        timestamp created_at
+    }
+    feedback {
+        serial id PK
+        integer user_id FK
+        varchar name
+        varchar email
+        varchar subject
+        text message
+        varchar category
+        varchar status
+        timestamp created_at
+    }
+    user_errors {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer lesson_id FK
+        varchar error_type
+        text error_text
+        text correct_text
+        text context
+        jsonb metadata
+        timestamp created_at
+    }
+    ai_conversations {
+        serial id PK
+        integer user_id FK
+        integer course_id FK
+        integer lesson_id FK
+        varchar language
+        varchar topic
+        jsonb messages
+        jsonb metadata
+        integer duration_seconds
+        integer score
+        text feedback
+        timestamp created_at
+    }
+</pre><p>Показаны все 15 таблиц из init.sql и AI-миграции; settings добавляется при старте API. PK — первичный ключ, FK — внешний ключ, UK — уникальное поле. У каждого родителя может быть 0..N дочерних записей. Все объявленные FK допускают NULL, поэтому на стороне родителя указано 0..1; обязательность связей на уровне интерфейса может быть строже. Дополнительные составные UNIQUE: progress(user_id, lesson_id) и test_attempts(test_id, user_id, started_at). achievements.user_id не имеет UNIQUE: физическая схема допускает несколько записей достижений на пользователя. Для компактности длины VARCHAR, значения по умолчанию и правила удаления здесь опущены; точные ограничения находятся в SQL.</p></section><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'strict',maxTextSize:100000});</script></html>
