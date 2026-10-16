@@ -1,0 +1,55 @@
+{
+  "verified_on": "2026-10-16",
+  "repository": "Arnurzhairbek/Adenly",
+  "issues": [
+    {
+      "number": 12,
+      "title": "[SEC-01] тест нәтижесінің тұтастығын қорғау",
+      "url": "https://github.com/Arnurzhairbek/Adenly/issues/12",
+      "state": "open",
+      "assignees": [
+        "Abdu1712"
+      ],
+      "milestone": {
+        "title": "ЛЗ 7 — 2026-11-13",
+        "due_on": "2026-11-13T00:00:00Z"
+      },
+      "body_has_owner": true
+    },
+    {
+      "number": 13,
+      "title": "[SEC-02] файл жүктеу арқылы DoS тәуекелін азайту",
+      "url": "https://github.com/Arnurzhairbek/Adenly/issues/13",
+      "state": "open",
+      "assignees": [
+        "Abdu1712"
+      ],
+      "milestone": {
+        "title": "ЛЗ 7 — 2026-11-20",
+        "due_on": "2026-11-20T00:00:00Z"
+      },
+      "body_has_owner": true
+    },
+    {
+      "number": 14,
+      "title": "[SEC-03] ЖИ және журналдардағы дербес деректерді қорғау",
+      "url": "https://github.com/Arnurzhairbek/Adenly/issues/14",
+      "state": "open",
+      "assignees": [
+        "Arnurzhairbek"
+      ],
+      "milestone": {
+        "title": "ЛЗ 7 — 2026-11-20",
+        "due_on": "2026-11-20T00:00:00Z"
+      },
+      "body_has_owner": true
+    }
+  ],
+  "projects": {
+    "status": "blocked",
+    "read_error": "Resource not accessible by integration (user.projectsV2.nodes.0)",
+    "create_error": "Resource not accessible by integration (createProjectV2)",
+    "board_created": false,
+    "items_added": false
+  }
+}

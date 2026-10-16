@@ -8,7 +8,7 @@
 | STRIDE: алты санат, шара, күй, сенім шекаралары | [threat-model.md](threat-model.md) | Модель және ресми схемамен тексерілген JSON дайын; браузерде ашу/экспорт әлі тексерілмеген |
 | Дербес деректер және ЖИ чек-листі | [compliance.md](compliance.md) | Код картасы дайын; ресми заң/университет талаптарымен тексеру ашық |
 | Trivy және gitleaks нақты нәтижелері | [scan-results.md](scan-results.md) | Екі сканер орындалды; 17 Trivy табылымы журналға енгізілді |
-| Үш шара: scope, owner, date, acceptance | [backlog.md](backlog.md) | Сипаттамалары дайын; Issues/Projects әлі құрылмаған |
+| Үш шара: scope, owner, date, acceptance | [backlog.md](backlog.md) | Issues #12–#14 жасалды, assignee және мерзімдер тексерілді; Projects рұқсаты жоқ |
 
 Команда: Жайрбек Арнұр — PM; Байғұл Шыңғыс — Business / System Analyst; Есеркенов Абдулазиз — Technical Lead / Developer; Әшімбай Қайсар — Data / QA Analyst. Оқытушы: Некесова А.А. Спонсор белгісіз.
 
@@ -19,7 +19,7 @@
 3. Спонсорды анықтап, басқарушылық резервті тәуекел резервінен бөлек бекіту.
 4. Дайын [JSON](threat-dragon.json) файлын Threat Dragon-ға импорттап, [нұсқаулықпен](threat-dragon-guide-kk.md) native JSON сақтап, қайта ашып тексеру.
 5. Adilet ресми мәтіні мен университет ережесін тексеру: бұл ортада сайт 403 қайтарады.
-6. SEC-01–03-ті GitHub Issues-ке ашып, нақты account-тарға тағайындап, Projects тақтасына қосу. API осы ортада Forbidden қайтарады; URL және тақтадағы көріну дәлелі қажет.
+6. SEC-01–03 үшін Issues [#12](https://github.com/Arnurzhairbek/Adenly/issues/12), [#13](https://github.com/Arnurzhairbek/Adenly/issues/13), [#14](https://github.com/Arnurzhairbek/Adenly/issues/14) жасалды, жауаптылары және мерзімдері тексерілді. Қалғаны — Projects тақтасына қосу: интеграцияға Projects құқығы жетпейді; board URL және карточкалардың көріну дәлелі қажет.
 
 **Осы ашық тармақтар жабылмайынша тапсырманы толық тапсырылды деп санауға болмайды.** Кодқа түзету жасалған жоқ: үш азайту шарасы — келесі әзірлеу жұмысы.
 
