@@ -1,0 +1,200 @@
+[
+  {
+    "id": "1.1.1",
+    "group": "1.1",
+    "result": "Қабылдау критерийлері бар MVP талаптары",
+    "extended_hours": 8,
+    "mvp_hours": 6,
+    "owner": "Байғұл Шыңғыс",
+    "deadline_demo_hours": 3
+  },
+  {
+    "id": "1.1.2",
+    "group": "1.1",
+    "result": "WBS, бағалар және жауапкершілік матрицасы",
+    "extended_hours": 8,
+    "mvp_hours": 6,
+    "owner": "Жайрбек Арнұр",
+    "deadline_demo_hours": 3
+  },
+  {
+    "id": "1.1.3",
+    "group": "1.1",
+    "result": "Тексерілген тәуелділіктер және релиз жоспары",
+    "extended_hours": 8,
+    "mvp_hours": 6,
+    "owner": "Жайрбек Арнұр",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.1.4",
+    "group": "1.1",
+    "result": "Өзгерістер журналы мен қабылдау хаттамасы",
+    "extended_hours": 8,
+    "mvp_hours": 4,
+    "owner": "Байғұл Шыңғыс",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.2.1",
+    "group": "1.2",
+    "result": "Расталған тіркелу және кіру сценарийі",
+    "extended_hours": 12,
+    "mvp_hours": 8,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 4
+  },
+  {
+    "id": "1.2.2",
+    "group": "1.2",
+    "result": "Курс пен сабақтың бірізді UI/API келісімшарты",
+    "extended_hours": 12,
+    "mvp_hours": 8,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 3
+  },
+  {
+    "id": "1.2.3",
+    "group": "1.2",
+    "result": "Оқу материалдарының тексерілген негізгі жиыны",
+    "extended_hours": 8,
+    "mvp_hours": 6,
+    "owner": "Байғұл Шыңғыс",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.2.4",
+    "group": "1.2",
+    "result": "Сақталатын негізгі профиль деректері",
+    "extended_hours": 8,
+    "mvp_hours": 4,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 1
+  },
+  {
+    "id": "1.3.1",
+    "group": "1.3",
+    "result": "Тұтас және рұқсатпен қорғалған тест нәтижесі",
+    "extended_hours": 14,
+    "mvp_hours": 8,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 4
+  },
+  {
+    "id": "1.3.2",
+    "group": "1.3",
+    "result": "Сәйкестендірілген оқу прогресі мен жетістіктері",
+    "extended_hours": 12,
+    "mvp_hours": 8,
+    "owner": "Әшімбай Қайсар",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.3.3",
+    "group": "1.3",
+    "result": "Негізгі сертификат пен хабарламалар сценарийі",
+    "extended_hours": 10,
+    "mvp_hours": 4,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 1
+  },
+  {
+    "id": "1.3.4",
+    "group": "1.3",
+    "result": "Негізгі браузерлік қабылдау тесттерінің есебі",
+    "extended_hours": 8,
+    "mvp_hours": 4,
+    "owner": "Әшімбай Қайсар",
+    "deadline_demo_hours": 1
+  },
+  {
+    "id": "1.4.1",
+    "group": "1.4",
+    "result": "Бекітілген файл жүктеу шектеулері",
+    "extended_hours": 12,
+    "mvp_hours": 10,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 4
+  },
+  {
+    "id": "1.4.2",
+    "group": "1.4",
+    "result": "Деректерді өңдеу картасы және ЖИ шекарасы",
+    "extended_hours": 10,
+    "mvp_hours": 8,
+    "owner": "Байғұл Шыңғыс",
+    "deadline_demo_hours": 4
+  },
+  {
+    "id": "1.4.3",
+    "group": "1.4",
+    "result": "Тәуелділік табылымдарының triage және түзету есебі",
+    "extended_hours": 6,
+    "mvp_hours": 3,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.4.4",
+    "group": "1.4",
+    "result": "Құқықтар матрицасы мен қауіпсіздік регрессиясы",
+    "extended_hours": 6,
+    "mvp_hours": 3,
+    "owner": "Әшімбай Қайсар",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.5.1",
+    "group": "1.5",
+    "result": "Дайындық тексеруі бар қайталанатын стенд",
+    "extended_hours": 8,
+    "mvp_hours": 6,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.5.2",
+    "group": "1.5",
+    "result": "Қалпына келтірілген сынақ көшірмесінің дәлелі",
+    "extended_hours": 6,
+    "mvp_hours": 3,
+    "owner": "Әшімбай Қайсар",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.5.3",
+    "group": "1.5",
+    "result": "Өлшенген негізгі өнімділік пен релиз есебі",
+    "extended_hours": 6,
+    "mvp_hours": 3,
+    "owner": "Әшімбай Қайсар",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.6.1",
+    "group": "1.6",
+    "result": "Салыстырылған деректер миграциясының нәтижесі",
+    "extended_hours": 10,
+    "mvp_hours": 8,
+    "owner": "Есеркенов Абдулазиз",
+    "deadline_demo_hours": 3
+  },
+  {
+    "id": "1.6.2",
+    "group": "1.6",
+    "result": "Нұсқаулығы мен кері байланысы бар оқыту пакеті",
+    "extended_hours": 8,
+    "mvp_hours": 6,
+    "owner": "Байғұл Шыңғыс",
+    "deadline_demo_hours": 2
+  },
+  {
+    "id": "1.6.3",
+    "group": "1.6",
+    "result": "Қабылдау актісі мен runbook бар тапсыру пакеті",
+    "extended_hours": 12,
+    "mvp_hours": 10,
+    "owner": "Жайрбек Арнұр",
+    "deadline_demo_hours": 3
+  }
+]
