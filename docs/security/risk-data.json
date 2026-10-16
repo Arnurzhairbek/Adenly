@@ -1,0 +1,134 @@
+[
+  {
+    "id": "R01",
+    "probability": 0.15,
+    "impact_hours": 24,
+    "emv_hours": 3.6
+  },
+  {
+    "id": "R02",
+    "probability": 0.6,
+    "impact_hours": 16,
+    "emv_hours": 9.6
+  },
+  {
+    "id": "R03",
+    "probability": 0.25,
+    "impact_hours": 20,
+    "emv_hours": 5.0
+  },
+  {
+    "id": "R04",
+    "probability": 0.4,
+    "impact_hours": 12,
+    "emv_hours": 4.8
+  },
+  {
+    "id": "R05",
+    "probability": 0.35,
+    "impact_hours": 10,
+    "emv_hours": 3.5
+  },
+  {
+    "id": "R06",
+    "probability": 0.2,
+    "impact_hours": 24,
+    "emv_hours": 4.8
+  },
+  {
+    "id": "R07",
+    "probability": 0.35,
+    "impact_hours": 16,
+    "emv_hours": 5.6
+  },
+  {
+    "id": "R08",
+    "probability": 0.2,
+    "impact_hours": 8,
+    "emv_hours": 1.6
+  },
+  {
+    "id": "R09",
+    "probability": 0.4,
+    "impact_hours": 8,
+    "emv_hours": 3.2
+  },
+  {
+    "id": "R10",
+    "probability": 0.45,
+    "impact_hours": 8,
+    "emv_hours": 3.6
+  },
+  {
+    "id": "R11",
+    "probability": 0.3,
+    "impact_hours": 20,
+    "emv_hours": 6.0
+  },
+  {
+    "id": "R12",
+    "probability": 0.3,
+    "impact_hours": 20,
+    "emv_hours": 6.0
+  },
+  {
+    "id": "R13",
+    "probability": 0.35,
+    "impact_hours": 12,
+    "emv_hours": 4.2
+  },
+  {
+    "id": "R14",
+    "probability": 0.25,
+    "impact_hours": 12,
+    "emv_hours": 3.0
+  },
+  {
+    "id": "R15",
+    "probability": 0.4,
+    "impact_hours": 12,
+    "emv_hours": 4.8
+  },
+  {
+    "id": "R16",
+    "probability": 0.5,
+    "impact_hours": 16,
+    "emv_hours": 8.0
+  },
+  {
+    "id": "R17",
+    "probability": 0.3,
+    "impact_hours": 16,
+    "emv_hours": 4.8
+  },
+  {
+    "id": "R18",
+    "probability": 0.4,
+    "impact_hours": 10,
+    "emv_hours": 4.0
+  },
+  {
+    "id": "R19",
+    "probability": 0.5,
+    "impact_hours": 12,
+    "emv_hours": 6.0
+  },
+  {
+    "id": "R20",
+    "probability": 0.4,
+    "impact_hours": 6,
+    "emv_hours": 2.4
+  },
+  {
+    "id": "R21",
+    "probability": 0.4,
+    "impact_hours": 8,
+    "emv_hours": 3.2
+  },
+  {
+    "id": "R22",
+    "probability": 0.5,
+    "impact_hours": 8,
+    "emv_hours": 4.0
+  }
+]
