@@ -1,0 +1,883 @@
+{
+  "version": "2.4.0",
+  "summary": {
+    "title": "Adenly — ЛЗ 7 STRIDE",
+    "owner": "Жайрбек Арнұр",
+    "description": "Компонент: Adenly тестілеу API. 1 actor, 1 process, 1 datastore, 3 trust boundaries, 4 data flows, 6 STRIDE threats. Импортқа дайын жоба; браузерде ашылуы/экспорты әлі тексерілмеген. Қорғаныс шаралары ашық. Жергілікті HTTP сипатталған, production HTTPS пен БД қорғауы — талап, тексерілген факт емес.",
+    "id": "d6b80b64-750e-56c3-a3ba-46c466f9e4ff"
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "Жайрбек Арнұр"
+      },
+      {
+        "name": "Байғұл Шыңғыс"
+      },
+      {
+        "name": "Есеркенов Абдулазиз"
+      },
+      {
+        "name": "Әшімбай Қайсар"
+      }
+    ],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "Тестілеу API — деректер және сенім шекаралары",
+        "description": "TB1 браузер → TB2 API → TB3 PostgreSQL. Төрт бағытталған деректер ағыны. Әр санаттың бір қаупі және шарасы бар.",
+        "diagramType": "STRIDE",
+        "placeholder": "Adenly STRIDE diagram",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "version": "2.4.0",
+        "cells": [
+          {
+            "position": {
+              "x": 20,
+              "y": 80
+            },
+            "size": {
+              "width": 340,
+              "height": 480
+            },
+            "attrs": {
+              "label": {
+                "text": "TB1 — Сенімсіз клиент"
+              }
+            },
+            "visible": true,
+            "shape": "trust-boundary-box",
+            "id": "a02b16f2-ae80-5291-8a9b-ccc0bff6b6b6",
+            "zIndex": -10,
+            "data": {
+              "type": "tm.BoundaryBox",
+              "description": "Сенім шекарасы: осы аймаққа өту кезіндегі деректер мен құқықтар тексеріледі.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "name": "TB1 — Сенімсіз клиент"
+            }
+          },
+          {
+            "position": {
+              "x": 470,
+              "y": 80
+            },
+            "size": {
+              "width": 340,
+              "height": 480
+            },
+            "attrs": {
+              "label": {
+                "text": "TB2 — API сервері"
+              }
+            },
+            "visible": true,
+            "shape": "trust-boundary-box",
+            "id": "d431ef13-c341-5b2b-bf12-97bd9be95d7d",
+            "zIndex": -10,
+            "data": {
+              "type": "tm.BoundaryBox",
+              "description": "Сенім шекарасы: осы аймаққа өту кезіндегі деректер мен құқықтар тексеріледі.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "name": "TB2 — API сервері"
+            }
+          },
+          {
+            "position": {
+              "x": 920,
+              "y": 80
+            },
+            "size": {
+              "width": 340,
+              "height": 480
+            },
+            "attrs": {
+              "label": {
+                "text": "TB3 — Дерекқор аймағы"
+              }
+            },
+            "visible": true,
+            "shape": "trust-boundary-box",
+            "id": "0a6d4cfa-bd93-5104-9e75-5d9f7425bc6e",
+            "zIndex": -10,
+            "data": {
+              "type": "tm.BoundaryBox",
+              "description": "Сенім шекарасы: осы аймаққа өту кезіндегі деректер мен құқықтар тексеріледі.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "name": "TB3 — Дерекқор аймағы"
+            }
+          },
+          {
+            "position": {
+              "x": 90,
+              "y": 270
+            },
+            "size": {
+              "width": 200,
+              "height": 110
+            },
+            "attrs": {
+              "text": {
+                "text": "Сыртқы пайдаланушы\nБраузер"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": ""
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "d9801790-18bb-57ca-81da-0f3d5a8362a4"
+                },
+                {
+                  "group": "right",
+                  "id": "e1c409c2-5da1-537d-8b36-de4d69289b2b"
+                },
+                {
+                  "group": "bottom",
+                  "id": "fa817f6d-aa16-5be1-9ecb-a615b66c900d"
+                },
+                {
+                  "group": "left",
+                  "id": "1d6b7dbc-a2a5-53f3-a021-5c051cc0300b"
+                }
+              ]
+            },
+            "id": "c0cc5b82-84a6-5a5b-a9a7-597bb30c9d2e",
+            "zIndex": 2,
+            "data": {
+              "type": "tm.Actor",
+              "name": "Сыртқы пайдаланушы\nБраузер",
+              "description": "Сенімсіз клиент. JWT және сұрау денесі серверде тексеріледі.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "providesAuthentication": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 540,
+              "y": 270
+            },
+            "size": {
+              "width": 200,
+              "height": 110
+            },
+            "attrs": {
+              "text": {
+                "text": "Adenly Test API"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": ""
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "023ed19b-6b55-5452-a6fc-ee4bae29631d"
+                },
+                {
+                  "group": "right",
+                  "id": "ee446b4d-8f96-50da-867f-0dd3c0c71345"
+                },
+                {
+                  "group": "bottom",
+                  "id": "b57ae7f0-fc0d-59d9-8822-558a6411e366"
+                },
+                {
+                  "group": "left",
+                  "id": "1261314b-2a4c-587e-82d9-257e36a19bd4"
+                }
+              ]
+            },
+            "id": "41345162-adb6-5d7a-ac68-9e856fac498e",
+            "zIndex": 2,
+            "data": {
+              "type": "tm.Process",
+              "name": "Adenly Test API",
+              "description": "GET /:testId/start және POST /:testId/submit. Клиент идентификаторларына және рөліне автоматты сенуге болмайды.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": true,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "e622157c-a77a-5599-a234-7f245e60b456",
+                  "title": "T-R — Repudiation — әрекеттен бас тарту",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "Пайдаланушы сертификатқа әкелген нақты сұрауды жоққа шығарады\nНысан/ағын: F1, F3\nҚазіргі бақылау: logger және test_attempts бар; өзгертілмейтін толық аудит дәлелі жоқ\nИесі: Есеркенов Абдулазиз.\nАғымдағы күйі: Жоспарланған.\nSeverity — бастапқы сараптамалық баға, команда бекітеді.",
+                  "mitigation": "Actor, request_id, action, object, outcome, timestamp аудиті; логты бөлек қорғау және сақтау мерзімі\nШара күйі: Жоспарланған.\nЖоспарланған шараны Mitigated деп белгілемеу керек.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 3,
+                  "score": ""
+                },
+                {
+                  "id": "371b5119-6126-54db-9328-0100ce742e8c",
+                  "title": "T-D — Denial of service — қызмет көрсетуден бас тарту",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "Үлкен responses массиві не параллель submit БД пулын толтырады\nНысан/ағын: F1, API, БД пулы\nҚазіргі бақылау: express.json 10mb және жалпы rate limiter бар; бизнес-жиым көлемі шектелмеген\nИесі: Есеркенов Абдулазиз.\nАғымдағы күйі: Жоспарланған; жалпы шектеулер бар.\nSeverity — бастапқы сараптамалық баға, команда бекітеді.",
+                  "mitigation": "Сұрақтар санына сай массив лимиті, timeout, concurrency шегі, submit rate limit, жүктеме тесті\nШара күйі: Жоспарланған; жалпы шектеулер бар.\nЖоспарланған шараны Mitigated деп белгілемеу керек.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 5,
+                  "score": ""
+                },
+                {
+                  "id": "88b791b2-574c-58b8-b12c-73314e60fff6",
+                  "title": "T-E — Elevation of privilege — құқықты көтеру",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Elevation of privilege",
+                  "description": "Ескі admin JWT рөл өзгергеннен кейін де admin құқықтарын сақтайды\nНысан/ағын: F1 және әкімшілік маршрут\nҚазіргі бақылау: adminMiddleware req.user.role мәніне сенеді; JWT-де role бар\nИесі: Есеркенов Абдулазиз.\nАғымдағы күйі: Ашық.\nSeverity — бастапқы сараптамалық баға, команда бекітеді.",
+                  "mitigation": "Ағымдағы рөлді БД-дан тексеру немесе token version/revocation; рөл өзгерту теріс тесті\nШара күйі: Ашық.\nЖоспарланған шараны Mitigated деп белгілемеу керек.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 6,
+                  "score": ""
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 990,
+              "y": 270
+            },
+            "size": {
+              "width": 200,
+              "height": 110
+            },
+            "attrs": {
+              "text": {
+                "text": "PostgreSQL"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": ""
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": "top",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "right": {
+                  "position": "right",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "bottom": {
+                  "position": "bottom",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                },
+                "left": {
+                  "position": "left",
+                  "attrs": {
+                    "circle": {
+                      "r": 4,
+                      "magnet": true,
+                      "stroke": "#5F95FF",
+                      "strokeWidth": 1,
+                      "fill": "#fff",
+                      "style": {
+                        "visibility": "hidden"
+                      }
+                    }
+                  }
+                }
+              },
+              "items": [
+                {
+                  "group": "top",
+                  "id": "1eb59a70-d1c8-52f6-b62b-e4fef6035fc6"
+                },
+                {
+                  "group": "right",
+                  "id": "8af4827d-1b94-5f40-8d29-a30407071fa5"
+                },
+                {
+                  "group": "bottom",
+                  "id": "5f64157c-eea2-5297-8fdb-03c1b33e373d"
+                },
+                {
+                  "group": "left",
+                  "id": "2f76d16f-456c-554d-b5ea-f95b421d1a35"
+                }
+              ]
+            },
+            "id": "b268faa8-a5ba-5876-bced-6d417c33edcd",
+            "zIndex": 2,
+            "data": {
+              "type": "tm.Store",
+              "name": "PostgreSQL",
+              "description": "tests, test_questions, test_answers, test_attempts, test_responses, certificates, users. Production шектеулі БД рөлі мен шифрлау дәлелденбеген.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": true,
+              "storesInventory": false,
+              "threats": []
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": ""
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 3,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "F1: JWT, testId,\nresponses, time_taken",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "F1: JWT, testId,\nresponses, time_taken",
+              "description": "Сызба ағымдағы архитектураны сипаттайды; production шифрлауы расталмаған.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": true,
+              "protocol": "HTTP; production HTTPS қажет",
+              "threats": [
+                {
+                  "id": "25d7849e-7a3d-512d-8e8b-ebddccb9d164",
+                  "title": "T-S — Spoofing — тұлғаны жалған көрсету",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Ұрланған localStorage JWT арқылы өзге пайдаланушы болып кіру\nНысан/ағын: F1, TB1→TB2\nҚазіргі бақылау: authMiddleware қолтаңбаны, мерзімді және purpose=access мәнін тексереді; AuthContext localStorage қолданады\nИесі: Әшімбай Қайсар.\nАғымдағы күйі: Ішінара; JWT тексеруі бар, қалғаны жоспарланған.\nSeverity — бастапқы сараптамалық баға, команда бекітеді.",
+                  "mitigation": "XSS-тен қорғанысты тексеру, қауіпсіз cookie мүмкіндігін бағалау, токенді қайтарып алу\nШара күйі: Ішінара; JWT тексеруі бар, қалғаны жоспарланған.\nЖоспарланған шараны Mitigated деп белгілемеу керек.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 1,
+                  "score": ""
+                },
+                {
+                  "id": "185050f5-8b39-5b9b-be03-921082822bf4",
+                  "title": "T-T — Tampering — деректерді бұрмалау",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Басқа тесттің question_id/answer_id мәнін жіберіп бағаны бұрмалау\nНысан/ағын: F1, F3\nҚазіргі бақылау: routes/tests.js submit сұрақты id бойынша алады; барлық байланыс пен толық жауаптар жиыны тексерілмейді\nИесі: Есеркенов Абдулазиз.\nАғымдағы күйі: Ашық.\nSeverity — бастапқы сараптамалық баға, команда бекітеді.",
+                  "mitigation": "SEC-01: барлық сұрақтың test_id сәйкестігі, answer_id байланысы, қайталанулар, толық жиын, транзакция\nШара күйі: Ашық.\nЖоспарланған шараны Mitigated деп белгілемеу керек.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 2,
+                  "score": ""
+                }
+              ]
+            },
+            "id": "b4498576-19ed-5078-a9d5-c8d8432bd17d",
+            "source": {
+              "cell": "c0cc5b82-84a6-5a5b-a9a7-597bb30c9d2e",
+              "port": "d9801790-18bb-57ca-81da-0f3d5a8362a4"
+            },
+            "target": {
+              "cell": "41345162-adb6-5d7a-ac68-9e856fac498e",
+              "port": "023ed19b-6b55-5452-a6fc-ee4bae29631d"
+            },
+            "vertices": [
+              {
+                "x": 415,
+                "y": 190
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": ""
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 3,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "F2: сұрақтар, нәтиже,\nсертификат не қате",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "F2: сұрақтар, нәтиже,\nсертификат не қате",
+              "description": "Сызба ағымдағы архитектураны сипаттайды; production шифрлауы расталмаған.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": true,
+              "protocol": "HTTP; production HTTPS қажет",
+              "threats": [
+                {
+                  "id": "e8231264-c78e-5e51-ade5-85d4bd9403d5",
+                  "title": "T-I — Information disclosure — ақпараттың ашылуы",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Бөгде талпыныс немесе дұрыс жауаптар рұқсатсыз ашылады\nНысан/ағын: F2, F4\nҚазіргі бақылау: attempts/:attemptId user_id бойынша сүзеді; start жауабында is_correct берілмейді\nИесі: Есеркенов Абдулазиз.\nАғымдағы күйі: Ішінара; толық теріс тесттер жоқ.\nSeverity — бастапқы сараптамалық баға, команда бекітеді.",
+                  "mitigation": "Иелікке арналған теріс тесттер; қате жауаптардан ішкі err.message алып тастау; минималды БД рөлі\nШара күйі: Ішінара; толық теріс тесттер жоқ.\nЖоспарланған шараны Mitigated деп белгілемеу керек.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 4,
+                  "score": ""
+                }
+              ]
+            },
+            "id": "99e8ffce-aa84-5abc-b539-fcca5680cb32",
+            "source": {
+              "cell": "41345162-adb6-5d7a-ac68-9e856fac498e",
+              "port": "b57ae7f0-fc0d-59d9-8822-558a6411e366"
+            },
+            "target": {
+              "cell": "c0cc5b82-84a6-5a5b-a9a7-597bb30c9d2e",
+              "port": "fa817f6d-aa16-5be1-9ecb-a615b66c900d"
+            },
+            "vertices": [
+              {
+                "x": 415,
+                "y": 460
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": ""
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 3,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "F3: SELECT, INSERT, UPDATE",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "F3: SELECT, INSERT, UPDATE",
+              "description": "Сызба ағымдағы архитектураны сипаттайды; production шифрлауы расталмаған.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "PostgreSQL",
+              "threats": []
+            },
+            "id": "437389f1-ca98-509b-a696-383311fb0caa",
+            "source": {
+              "cell": "41345162-adb6-5d7a-ac68-9e856fac498e",
+              "port": "023ed19b-6b55-5452-a6fc-ee4bae29631d"
+            },
+            "target": {
+              "cell": "b268faa8-a5ba-5876-bced-6d417c33edcd",
+              "port": "1eb59a70-d1c8-52f6-b62b-e4fef6035fc6"
+            },
+            "vertices": [
+              {
+                "x": 865,
+                "y": 190
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": ""
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 3,
+            "labels": [
+              {
+                "markup": [
+                  {
+                    "tagName": "ellipse",
+                    "selector": "labelBody"
+                  },
+                  {
+                    "tagName": "text",
+                    "selector": "labelText"
+                  }
+                ],
+                "attrs": {
+                  "labelText": {
+                    "text": "F4: сұрақтар, кілттер,\nталпыныстар",
+                    "textAnchor": "middle",
+                    "textVerticalAnchor": "middle"
+                  },
+                  "labelBody": {
+                    "ref": "labelText",
+                    "refRx": "50%",
+                    "refRy": "60%",
+                    "fill": "#fff",
+                    "strokeWidth": 0
+                  }
+                },
+                "position": {
+                  "distance": 0.5,
+                  "args": {
+                    "keepGradient": true,
+                    "ensureLegibility": true
+                  }
+                }
+              }
+            ],
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "F4: сұрақтар, кілттер,\nталпыныстар",
+              "description": "Сызба ағымдағы архитектураны сипаттайды; production шифрлауы расталмаған.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "PostgreSQL",
+              "threats": []
+            },
+            "id": "02280d27-3711-5792-b721-b50a120f2d4d",
+            "source": {
+              "cell": "b268faa8-a5ba-5876-bced-6d417c33edcd",
+              "port": "5f64157c-eea2-5297-8fdb-03c1b33e373d"
+            },
+            "target": {
+              "cell": "41345162-adb6-5d7a-ac68-9e856fac498e",
+              "port": "b57ae7f0-fc0d-59d9-8822-558a6411e366"
+            },
+            "vertices": [
+              {
+                "x": 865,
+                "y": 460
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "diagramTop": 1,
+    "threatTop": 6,
+    "reviewer": "Әшімбай Қайсар — ұсынылған reviewer; review өткізілген жоқ"
+  }
+}
