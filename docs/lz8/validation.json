@@ -1,0 +1,46 @@
+{
+  "date": "23.10.2026",
+  "formula_count": 393,
+  "independent_formula_recalculation": "passed",
+  "all_formula_caches_match": "passed",
+  "double_MAU_sensitivity": "passed: 192000 annual operations; S3 budget 80",
+  "decimal_budget_arithmetic": "passed",
+  "local_markdown_links": "passed",
+  "annual_opex": 818000.0,
+  "annual_reserve": 81800.0,
+  "annual_limit": 899800.0,
+  "cost_per_MAU_month": 74.98333333333333,
+  "cost_per_operation": 9.372916666666667,
+  "first_cheaper_monthly_operations": 853,
+  "TCO36": {
+    "cloud": {
+      "base": 2482000.0,
+      "total": 2730200.0,
+      "rec": 67500.0,
+      "cap": 28000,
+      "stress": 3006410.000000001
+    },
+    "own": {
+      "base": 3610376.0,
+      "total": 3971413.6,
+      "rec": 87066.0,
+      "cap": 452000,
+      "stress": 4327687.672000001
+    },
+    "org": {
+      "base": 2230000.0,
+      "total": 2453000.0,
+      "rec": 60500.0,
+      "cap": 28000,
+      "stress": 2700566.000000001
+    }
+  },
+  "not_verified": [
+    "provider tariff/calculator",
+    "current legal requirements",
+    "customer/operator approval",
+    "weeks 1–2 originals",
+    "production SLO",
+    "browser/restore acceptance"
+  ]
+}
