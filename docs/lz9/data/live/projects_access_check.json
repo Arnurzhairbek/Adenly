@@ -1,0 +1,14 @@
+{
+  "checked_at_utc": "2026-10-30T08:18:54.833524+00:00",
+  "network_proxy_block_resolved": true,
+  "viewer_login": "Arnurzhairbek",
+  "repository_api_access": true,
+  "repository_linked_projects": [],
+  "user_projects_access": false,
+  "projects_error": "Resource not accessible by integration",
+  "personal_project_list_complete": false,
+  "projects_snapshot_exported": false,
+  "credential_requirement_saved": "GH_PROJECTS_TOKEN",
+  "credential_value_present": false,
+  "credentials_logged": false
+}

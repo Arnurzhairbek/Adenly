@@ -2,6 +2,7 @@
 """Prepare a GitHub Project; defaults to a read-only local plan. Needs live Projects permissions."""
 from pathlib import Path
 import argparse, json, subprocess
+from github_access import github_env
 
 ROOT=Path(__file__).resolve().parents[1]
 OWNER='Arnurzhairbek'
@@ -15,7 +16,7 @@ OPTIONS=[
 FIELDS={'Sprint':('SINGLE_SELECT','S1,S2'),'StartedAt':('DATE',None),'DoneAt':('DATE',None),'BlockedReason':('TEXT',None),'Source':('TEXT',None)}
 
 def gh(*args):
-    return subprocess.run(['gh',*args],check=True,capture_output=True,text=True).stdout
+    return subprocess.run(['gh',*args],check=True,capture_output=True,text=True,env=github_env()).stdout
 
 def gql(query,**variables):
     args=['api','graphql','-f','query='+query]
@@ -47,7 +48,7 @@ def main():
             if project['items']['totalCount']==0:
                 payload={'query':'mutation($input:UpdateProjectV2FieldInput!){updateProjectV2Field(input:$input){projectV2Field{... on ProjectV2SingleSelectField{id name}}}}',
                          'variables':{'input':{'fieldId':status['id'],'singleSelectOptions':OPTIONS}}}
-                result=subprocess.run(['gh','api','graphql','--input','-'],input=json.dumps(payload),check=True,capture_output=True,text=True)
+                result=subprocess.run(['gh','api','graphql','--input','-'],input=json.dumps(payload),check=True,capture_output=True,text=True,env=github_env())
                 if json.loads(result.stdout).get('errors'):raise RuntimeError(result.stdout)
             else:
                 raise RuntimeError('Nonempty project: Status migration requires UI mapping to preserve existing assignments; no statuses replaced.')

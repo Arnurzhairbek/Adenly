@@ -1,0 +1,14 @@
+﻿number,title,issue_state,url,created_at,updated_at,closed_at,assignees,labels,source
+1,[US-01] Пайдаланушыны тіркеу,closed,https://github.com/Arnurzhairbek/Adenly/issues/1,2026-10-09T07:32:08Z,2026-10-09T08:51:23Z,2026-10-09T08:51:23Z,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+2,[US-02] Жүйеге кіру және JWT авторизациясы,closed,https://github.com/Arnurzhairbek/Adenly/issues/2,2026-10-09T07:32:11Z,2026-10-09T08:51:24Z,2026-10-09T08:51:24Z,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+3,[US-03] Қорғалған маршруттар мен қолжетімділік құқықтары,open,https://github.com/Arnurzhairbek/Adenly/issues/3,2026-10-09T07:32:12Z,2026-10-09T08:51:26Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+4,[US-04] Пайдаланушы профилі,open,https://github.com/Arnurzhairbek/Adenly/issues/4,2026-10-09T07:32:14Z,2026-10-09T08:51:27Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+5,[US-05] Тіл курстарының тізімі,open,https://github.com/Arnurzhairbek/Adenly/issues/5,2026-10-09T07:32:16Z,2026-10-09T08:51:28Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+6,[US-06] Курс сабақтарын қарау,open,https://github.com/Arnurzhairbek/Adenly/issues/6,2026-10-09T07:32:18Z,2026-10-09T08:51:29Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+7,[US-07] Сабақ мазмұны мен оқу материалдары,open,https://github.com/Arnurzhairbek/Adenly/issues/7,2026-10-09T07:32:20Z,2026-10-09T08:51:30Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+8,[US-08] Сабақ тапсырмалары мен тесттер,open,https://github.com/Arnurzhairbek/Adenly/issues/8,2026-10-09T07:32:22Z,2026-10-09T08:51:31Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+9,[US-09] Оқу прогресі және жетістіктер,open,https://github.com/Arnurzhairbek/Adenly/issues/9,2026-10-09T07:32:25Z,2026-10-09T08:51:32Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+10,[US-10] Хабарландырулар,open,https://github.com/Arnurzhairbek/Adenly/issues/10,2026-10-09T07:32:28Z,2026-10-09T08:51:33Z,,,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+12,[SEC-01] тест нәтижесінің тұтастығын қорғау,open,https://github.com/Arnurzhairbek/Adenly/issues/12,2026-10-16T08:23:51Z,2026-10-16T08:26:22Z,,Abdu1712,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+13,[SEC-02] файл жүктеу арқылы DoS тәуекелін азайту,open,https://github.com/Arnurzhairbek/Adenly/issues/13,2026-10-16T08:23:53Z,2026-10-16T08:24:26Z,,Abdu1712,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT
+14,[SEC-03] ЖИ және журналдардағы дербес деректерді қорғау,open,https://github.com/Arnurzhairbek/Adenly/issues/14,2026-10-16T08:23:55Z,2026-10-16T08:24:29Z,,Arnurzhairbek,,GITHUB_REPOSITORY_ISSUES_SNAPSHOT

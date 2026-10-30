@@ -2,11 +2,12 @@
 """Export a current snapshot; explicitly does not invent Project status-transition history."""
 import argparse, csv, json, subprocess
 from pathlib import Path
+from github_access import github_env
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--project',required=True,type=int);p.add_argument('--output',required=True,type=Path);a=p.parse_args()
     try:
-        raw=subprocess.run(['gh','project','item-list',str(a.project),'--owner','Arnurzhairbek','--limit','10000','--format','json'],check=True,capture_output=True,text=True).stdout
+        raw=subprocess.run(['gh','project','item-list',str(a.project),'--owner','Arnurzhairbek','--limit','10000','--format','json'],check=True,capture_output=True,text=True,env=github_env()).stdout
     except subprocess.CalledProcessError as exc:
         raise SystemExit(exc.stderr)
     obj=json.loads(raw);items=obj['items']

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Add existing OPEN Adenly issues to a real project, without closing/relabeling issues or moving existing items."""
 import argparse,json,subprocess
+from github_access import github_env
 
 PRIORITY=[12,13,14,4,6,3,8,9,5,7,10]
 def gh(*args):
-    result=subprocess.run(['gh',*args],check=True,capture_output=True,text=True)
+    result=subprocess.run(['gh',*args],check=True,capture_output=True,text=True,env=github_env(projects=args[0]=='project'))
     return json.loads(result.stdout)
 
 def main():
@@ -16,7 +17,14 @@ def main():
     snapshot=gh('project','item-list',str(a.project),'--owner',owner,'--limit','10000','--format','json')
     if snapshot.get('totalCount')!=len(snapshot['items']):raise SystemExit('Incomplete project listing; refusing mutation')
     existing={i.get('content',{}).get('url') for i in snapshot['items']}
-    pages=gh('api',f'repos/{repo}/issues?state=all&per_page=100','--paginate','--slurp')
+    # Explicit pagination also works with gh 2.46, which has no --slurp flag.
+    pages=[];page=1
+    while True:
+        batch=gh('api',f'repos/{repo}/issues?state=all&per_page=100&page={page}')
+        if not isinstance(batch,list):raise SystemExit('Unexpected issues response')
+        pages.append(batch)
+        if len(batch)<100:break
+        page+=1
     issues={i['number']:i for page in pages for i in page if 'pull_request' not in i}
     project=gh('project','view',str(a.project),'--owner',owner,'--format','json')
     fields=gh('project','field-list',str(a.project),'--owner',owner,'--limit','100','--format','json')

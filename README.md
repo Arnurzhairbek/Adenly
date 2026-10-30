@@ -14,3 +14,6 @@ Adenly IT Project - Team Project
 ## ЛЗ 9 — екі спринт симуляциясы
 
 [Қазақша оқу симуляциясы: тақта саясаты, WIP, DoR/DoD, екі спринт метрикалары, CFD және бір әрекетті ретроспектива](docs/lz9/README.md). CSV, Python, Word, PDF, Excel және ZIP пакет қоса берілген. Live GitHub Projects API қолжетімділігі шектеулі екені құжатта көрсетілген.
+
+
+[Нақты GitHub Issues экспорты — CSV/JSON және Projects қолжетімділігі](docs/lz9/data/live/README.md).

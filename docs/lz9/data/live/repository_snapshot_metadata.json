@@ -1,0 +1,22 @@
+{
+  "source": "GITHUB_REPOSITORY_ISSUES_SNAPSHOT",
+  "fetched_at_utc": "2026-10-30T08:18:19.298797+00:00",
+  "repository": "Arnurzhairbek/Adenly",
+  "count": 13,
+  "open": 11,
+  "closed": 2,
+  "excludes_pull_requests": true,
+  "complete_pagination": true,
+  "is_projects_export": false,
+  "transition_history_available": false,
+  "limitations": [
+    "Issue state is open/closed, NOT Projects Status",
+    "created_at is NOT In Progress entry",
+    "closed_at is NOT Projects Done",
+    "Do not compute sprint throughput/cycle time/WIP from this snapshot"
+  ],
+  "files_sha256": {
+    "repository_issues.csv": "0be2e0dc6f87c28595e33ad2983856c5f86546bada5bd112299c705377a0dfdc",
+    "repository_issues.json": "f010465943877df9f02d4cb4fa393e266e7fba7bb99456835d61d5eb68bddc6a"
+  }
+}
