@@ -1,0 +1,25 @@
+{
+  "source": "SIMULATION",
+  "not_real_work": true,
+  "timezone": "Asia/Qyzylorda",
+  "generated_on": "2026-10-30",
+  "sprint_windows": {
+    "S1": [
+      "2026-11-02",
+      "2026-11-06"
+    ],
+    "S2": [
+      "2026-11-09",
+      "2026-11-13"
+    ]
+  },
+  "business_day": "Monday–Friday 09:00–17:00, no lunch deduction; 8 elapsed business hours = 1 flow day, NOT person effort",
+  "task_size": "2 person-hours per synthetic item, review/test/docs included; estimates, not measured effort",
+  "real_issue_effect": "Reference only: no issues closed or updated; no application functionality implemented.",
+  "action": "Review-first: an available eligible teammate claims the oldest unclaimed review before starting a new item.",
+  "limitations": [
+    "Hand-constructed scenario, no causal proof or real team history",
+    "No blocked items or rework in fixture",
+    "No warm-up or carryover; Little identity holds by construction"
+  ]
+}

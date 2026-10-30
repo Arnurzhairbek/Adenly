@@ -1,0 +1,9 @@
+{
+  "source": "SIMULATION",
+  "date": "2026-10-30",
+  "formula_count": 120,
+  "formula_caches": "verified",
+  "per_card_business_time_formula": "independently checked",
+  "real_project_configured": false,
+  "reason": "GitHub GraphQL/REST Forbidden"
+}

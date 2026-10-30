@@ -1,0 +1,85 @@
+﻿item_id,sprint,timestamp,event,from_status,to_status,actor,source
+SIM-01,S1,2026-10-30T09:00:00+05:00,transition,,Backlog,Есеркенов Абдулазиз,SIMULATION
+SIM-02,S1,2026-10-30T09:00:00+05:00,transition,,Backlog,Байғұл Шыңғыс,SIMULATION
+SIM-03,S1,2026-10-30T09:00:00+05:00,transition,,Backlog,Әшімбай Қайсар,SIMULATION
+SIM-04,S1,2026-10-30T09:00:00+05:00,transition,,Backlog,Жайрбек Арнұр,SIMULATION
+SIM-05,S1,2026-10-30T09:00:00+05:00,transition,,Backlog,Есеркенов Абдулазиз,SIMULATION
+SIM-06,S1,2026-10-30T09:00:00+05:00,transition,,Backlog,Байғұл Шыңғыс,SIMULATION
+SIM-07,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Есеркенов Абдулазиз,SIMULATION
+SIM-08,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Байғұл Шыңғыс,SIMULATION
+SIM-09,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Әшімбай Қайсар,SIMULATION
+SIM-10,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Жайрбек Арнұр,SIMULATION
+SIM-11,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Есеркенов Абдулазиз,SIMULATION
+SIM-12,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Байғұл Шыңғыс,SIMULATION
+SIM-13,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Әшімбай Қайсар,SIMULATION
+SIM-14,S2,2026-10-30T09:00:00+05:00,transition,,Backlog,Жайрбек Арнұр,SIMULATION
+SIM-01,S1,2026-11-02T09:00:00+05:00,transition,Backlog,Ready,Есеркенов Абдулазиз,SIMULATION
+SIM-01,S1,2026-11-02T09:00:00+05:00,transition,Ready,In Progress,Есеркенов Абдулазиз,SIMULATION
+SIM-02,S1,2026-11-02T09:00:00+05:00,transition,Backlog,Ready,Байғұл Шыңғыс,SIMULATION
+SIM-02,S1,2026-11-02T09:00:00+05:00,transition,Ready,In Progress,Байғұл Шыңғыс,SIMULATION
+SIM-03,S1,2026-11-02T09:00:00+05:00,transition,Backlog,Ready,Әшімбай Қайсар,SIMULATION
+SIM-03,S1,2026-11-02T09:00:00+05:00,transition,Ready,In Progress,Әшімбай Қайсар,SIMULATION
+SIM-04,S1,2026-11-02T09:00:00+05:00,transition,Backlog,Ready,Жайрбек Арнұр,SIMULATION
+SIM-05,S1,2026-11-02T09:00:00+05:00,transition,Backlog,Ready,Есеркенов Абдулазиз,SIMULATION
+SIM-06,S1,2026-11-02T09:00:00+05:00,transition,Backlog,Ready,Байғұл Шыңғыс,SIMULATION
+SIM-01,S1,2026-11-03T09:00:00+05:00,transition,In Progress,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-04,S1,2026-11-03T09:00:00+05:00,transition,Ready,In Progress,Жайрбек Арнұр,SIMULATION
+SIM-02,S1,2026-11-03T13:00:00+05:00,transition,In Progress,Review,Байғұл Шыңғыс,SIMULATION
+SIM-03,S1,2026-11-04T09:00:00+05:00,transition,In Progress,Review,Әшімбай Қайсар,SIMULATION
+SIM-05,S1,2026-11-04T09:00:00+05:00,transition,Ready,In Progress,Есеркенов Абдулазиз,SIMULATION
+SIM-02,S1,2026-11-04T13:00:00+05:00,review_started,Review,Review,Жайрбек Арнұр,SIMULATION
+SIM-02,S1,2026-11-05T09:00:00+05:00,transition,Review,Done,Байғұл Шыңғыс,SIMULATION
+SIM-04,S1,2026-11-05T09:00:00+05:00,transition,In Progress,Review,Жайрбек Арнұр,SIMULATION
+SIM-06,S1,2026-11-05T09:00:00+05:00,transition,Ready,In Progress,Байғұл Шыңғыс,SIMULATION
+SIM-01,S1,2026-11-05T13:00:00+05:00,review_started,Review,Review,Әшімбай Қайсар,SIMULATION
+SIM-03,S1,2026-11-05T13:00:00+05:00,review_started,Review,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-04,S1,2026-11-05T13:00:00+05:00,review_started,Review,Review,Байғұл Шыңғыс,SIMULATION
+SIM-01,S1,2026-11-06T09:00:00+05:00,transition,Review,Done,Есеркенов Абдулазиз,SIMULATION
+SIM-03,S1,2026-11-06T09:00:00+05:00,transition,Review,Done,Әшімбай Қайсар,SIMULATION
+SIM-04,S1,2026-11-06T09:00:00+05:00,transition,Review,Done,Жайрбек Арнұр,SIMULATION
+SIM-05,S1,2026-11-06T09:00:00+05:00,transition,In Progress,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-05,S1,2026-11-06T09:00:00+05:00,review_started,Review,Review,Жайрбек Арнұр,SIMULATION
+SIM-05,S1,2026-11-06T13:00:00+05:00,transition,Review,Done,Есеркенов Абдулазиз,SIMULATION
+SIM-06,S1,2026-11-06T13:00:00+05:00,transition,In Progress,Review,Байғұл Шыңғыс,SIMULATION
+SIM-06,S1,2026-11-06T13:00:00+05:00,review_started,Review,Review,Әшімбай Қайсар,SIMULATION
+SIM-06,S1,2026-11-06T17:00:00+05:00,transition,Review,Done,Байғұл Шыңғыс,SIMULATION
+SIM-07,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Есеркенов Абдулазиз,SIMULATION
+SIM-07,S2,2026-11-09T09:00:00+05:00,transition,Ready,In Progress,Есеркенов Абдулазиз,SIMULATION
+SIM-08,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Байғұл Шыңғыс,SIMULATION
+SIM-08,S2,2026-11-09T09:00:00+05:00,transition,Ready,In Progress,Байғұл Шыңғыс,SIMULATION
+SIM-09,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Әшімбай Қайсар,SIMULATION
+SIM-09,S2,2026-11-09T09:00:00+05:00,transition,Ready,In Progress,Әшімбай Қайсар,SIMULATION
+SIM-10,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Жайрбек Арнұр,SIMULATION
+SIM-11,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Есеркенов Абдулазиз,SIMULATION
+SIM-12,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Байғұл Шыңғыс,SIMULATION
+SIM-13,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Әшімбай Қайсар,SIMULATION
+SIM-14,S2,2026-11-09T09:00:00+05:00,transition,Backlog,Ready,Жайрбек Арнұр,SIMULATION
+SIM-10,S2,2026-11-09T13:00:00+05:00,transition,Ready,In Progress,Жайрбек Арнұр,SIMULATION
+SIM-11,S2,2026-11-10T09:00:00+05:00,transition,Ready,In Progress,Есеркенов Абдулазиз,SIMULATION
+SIM-07,S2,2026-11-10T13:00:00+05:00,transition,In Progress,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-07,S2,2026-11-10T13:00:00+05:00,review_started,Review,Review,Әшімбай Қайсар,SIMULATION
+SIM-08,S2,2026-11-10T13:00:00+05:00,transition,In Progress,Review,Байғұл Шыңғыс,SIMULATION
+SIM-08,S2,2026-11-10T13:00:00+05:00,review_started,Review,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-12,S2,2026-11-10T13:00:00+05:00,transition,Ready,In Progress,Байғұл Шыңғыс,SIMULATION
+SIM-07,S2,2026-11-11T09:00:00+05:00,transition,Review,Done,Есеркенов Абдулазиз,SIMULATION
+SIM-08,S2,2026-11-11T09:00:00+05:00,transition,Review,Done,Байғұл Шыңғыс,SIMULATION
+SIM-09,S2,2026-11-11T09:00:00+05:00,transition,In Progress,Review,Әшімбай Қайсар,SIMULATION
+SIM-09,S2,2026-11-11T09:00:00+05:00,review_started,Review,Review,Жайрбек Арнұр,SIMULATION
+SIM-10,S2,2026-11-11T09:00:00+05:00,transition,In Progress,Review,Жайрбек Арнұр,SIMULATION
+SIM-10,S2,2026-11-11T09:00:00+05:00,review_started,Review,Review,Байғұл Шыңғыс,SIMULATION
+SIM-13,S2,2026-11-11T09:00:00+05:00,transition,Ready,In Progress,Әшімбай Қайсар,SIMULATION
+SIM-09,S2,2026-11-11T13:00:00+05:00,transition,Review,Done,Әшімбай Қайсар,SIMULATION
+SIM-10,S2,2026-11-11T13:00:00+05:00,transition,Review,Done,Жайрбек Арнұр,SIMULATION
+SIM-11,S2,2026-11-11T13:00:00+05:00,transition,In Progress,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-11,S2,2026-11-11T13:00:00+05:00,review_started,Review,Review,Әшімбай Қайсар,SIMULATION
+SIM-14,S2,2026-11-11T13:00:00+05:00,transition,Ready,In Progress,Жайрбек Арнұр,SIMULATION
+SIM-11,S2,2026-11-12T09:00:00+05:00,transition,Review,Done,Есеркенов Абдулазиз,SIMULATION
+SIM-12,S2,2026-11-12T09:00:00+05:00,transition,In Progress,Review,Байғұл Шыңғыс,SIMULATION
+SIM-12,S2,2026-11-12T09:00:00+05:00,review_started,Review,Review,Жайрбек Арнұр,SIMULATION
+SIM-12,S2,2026-11-12T13:00:00+05:00,transition,Review,Done,Байғұл Шыңғыс,SIMULATION
+SIM-13,S2,2026-11-12T13:00:00+05:00,transition,In Progress,Review,Әшімбай Қайсар,SIMULATION
+SIM-13,S2,2026-11-12T13:00:00+05:00,review_started,Review,Review,Есеркенов Абдулазиз,SIMULATION
+SIM-13,S2,2026-11-13T09:00:00+05:00,transition,Review,Done,Әшімбай Қайсар,SIMULATION
+SIM-14,S2,2026-11-13T13:00:00+05:00,transition,In Progress,Review,Жайрбек Арнұр,SIMULATION
+SIM-14,S2,2026-11-13T13:00:00+05:00,review_started,Review,Review,Байғұл Шыңғыс,SIMULATION
+SIM-14,S2,2026-11-13T17:00:00+05:00,transition,Review,Done,Жайрбек Арнұр,SIMULATION

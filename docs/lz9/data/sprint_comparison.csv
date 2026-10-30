@@ -1,0 +1,9 @@
+﻿metric,S1,S2,change_percent
+throughput,6,8,33.33333333333333
+mean_cycle_days,3.0833333333333335,2.125,-31.081081081081084
+p85_cycle_days,4.0,2.475,-38.125
+avg_wip,3.7,3.4,-8.108108108108116
+mean_review_days,1.4166666666666667,0.5,-64.70588235294117
+mean_review_wait_days,0.9166666666666666,0.0,-100.0
+peak_review,3,2,-33.33333333333333
+review_first_start_violations,3,0,-100.0

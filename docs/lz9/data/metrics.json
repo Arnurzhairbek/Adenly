@@ -1,0 +1,139 @@
+{
+  "source": "SIMULATION_NOT_REAL_TRACKER_HISTORY",
+  "percentile_method": "PERCENTILE.INC, linear interpolation at (n-1)*0.85",
+  "measurement": "business days, Mon–Fri 09–17, +05:00; time-weighted occupancy, includes Review waiting; excludes Ready",
+  "input_sha256": {
+    "simulated_board_export.csv": "5e3047463e1c9cdfb1ad9bc0ca35f17075a5b4f93baa95a0c2c3b83d4356c6bb",
+    "simulated_transition_log.csv": "804d9319bba1f96c4443981b19ef600dc1cbe5825ef3be4c4c697376bccb8186"
+  },
+  "sprints": {
+    "S1": {
+      "source": "SIMULATION",
+      "start": "2026-11-02T09:00:00+05:00",
+      "end": "2026-11-06T17:00:00+05:00",
+      "working_days": 5.0,
+      "throughput": 6,
+      "throughput_per_day": 1.2,
+      "mean_cycle_days": 3.0833333333333335,
+      "p85_cycle_days": 4.0,
+      "avg_wip": 3.7,
+      "avg_in_progress": 2.0,
+      "avg_review": 1.7,
+      "mean_review_days": 1.4166666666666667,
+      "p85_review_days": 2.25,
+      "mean_review_wait_days": 0.9166666666666666,
+      "p85_review_wait_days": 1.75,
+      "mean_ready_days": 1.0,
+      "mean_in_progress_days": 1.6666666666666667,
+      "mean_review_processing_elapsed_days": 0.5000000000000001,
+      "little_rhs": 3.7,
+      "little_residual": 0.0,
+      "opening_wip": 0,
+      "closing_wip": 0,
+      "daily_wip": [
+        3.0,
+        4.0,
+        5.0,
+        5.0,
+        1.5
+      ],
+      "peak_review": 3,
+      "peak_per_person_in_progress": 1,
+      "peak_unclaimed_review": 3,
+      "review_first_start_violations": 3,
+      "estimated_person_hours": 12.0
+    },
+    "S2": {
+      "source": "SIMULATION",
+      "start": "2026-11-09T09:00:00+05:00",
+      "end": "2026-11-13T17:00:00+05:00",
+      "working_days": 5.0,
+      "throughput": 8,
+      "throughput_per_day": 1.6,
+      "mean_cycle_days": 2.125,
+      "p85_cycle_days": 2.475,
+      "avg_wip": 3.4,
+      "avg_in_progress": 2.6,
+      "avg_review": 0.8,
+      "mean_review_days": 0.5,
+      "p85_review_days": 0.5,
+      "mean_review_wait_days": 0.0,
+      "p85_review_wait_days": 0.0,
+      "mean_ready_days": 0.9375,
+      "mean_in_progress_days": 1.625,
+      "mean_review_processing_elapsed_days": 0.5,
+      "little_rhs": 3.4000000000000004,
+      "little_residual": -4.440892098500626e-16,
+      "opening_wip": 0,
+      "closing_wip": 0,
+      "daily_wip": [
+        3.5,
+        5.5,
+        4.5,
+        2.5,
+        1.0
+      ],
+      "peak_review": 2,
+      "peak_per_person_in_progress": 2,
+      "peak_unclaimed_review": 0,
+      "review_first_start_violations": 0,
+      "estimated_person_hours": 16.0
+    }
+  },
+  "comparison": [
+    {
+      "metric": "throughput",
+      "S1": 6,
+      "S2": 8,
+      "change_percent": 33.33333333333333
+    },
+    {
+      "metric": "mean_cycle_days",
+      "S1": 3.0833333333333335,
+      "S2": 2.125,
+      "change_percent": -31.081081081081084
+    },
+    {
+      "metric": "p85_cycle_days",
+      "S1": 4.0,
+      "S2": 2.475,
+      "change_percent": -38.125
+    },
+    {
+      "metric": "avg_wip",
+      "S1": 3.7,
+      "S2": 3.4,
+      "change_percent": -8.108108108108116
+    },
+    {
+      "metric": "mean_review_days",
+      "S1": 1.4166666666666667,
+      "S2": 0.5,
+      "change_percent": -64.70588235294117
+    },
+    {
+      "metric": "mean_review_wait_days",
+      "S1": 0.9166666666666666,
+      "S2": 0.0,
+      "change_percent": -100.0
+    },
+    {
+      "metric": "peak_review",
+      "S1": 3,
+      "S2": 2,
+      "change_percent": -33.33333333333333
+    },
+    {
+      "metric": "review_first_start_violations",
+      "S1": 3,
+      "S2": 0,
+      "change_percent": -100.0
+    }
+  ],
+  "limitations": [
+    "No live Projects board configured: API Forbidden",
+    "Closed synthetic cohorts only; no carryover/rework/blocked time",
+    "Sample-path Little identity is expected here; it does not prove realism or causal improvement",
+    "Real ledger with missing events must be corrected, not guessed; real windows must be explicitly configured"
+  ]
+}
