@@ -5,6 +5,8 @@ const adminMiddleware = require('../middleware/adminMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 const logger = require('../utils/logger');
 
+router.get('/:courseId/lessons', require('../controllers/courseLessonsController').listCourseLessons);
+
 // 📘 Получить все курсы
 router.get('/', async (req, res) => {
   try {

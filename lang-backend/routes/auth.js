@@ -10,6 +10,25 @@ require("dotenv").config();
 
 const router = express.Router();
 
+// Only the authenticated user's display name is editable here.
+router.put('/me', require('../middleware/authMiddleware'), async (req, res) => {
+  const name = req.body?.name;
+  if (typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 100) {
+    return res.status(400).json({ message: 'Аты 2–100 таңбадан тұруы керек' });
+  }
+  try {
+    const result = await pool.query(
+      'UPDATE users SET name = $1 WHERE id = $2 RETURNING id, email, name, role, is_verified, created_at, settings',
+      [name.trim(), req.user.id]
+    );
+    if (!result.rows.length) return res.status(404).json({ message: 'Пайдаланушы табылмады' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    logger.error('Profile update failed', { userId: req.user.id, error: err.message });
+    res.status(500).json({ message: 'Профильді сақтау қатесі' });
+  }
+});
+
 /* ============================
    ✅ Регистрация + подтверждение Email
 ============================ */

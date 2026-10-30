@@ -35,7 +35,7 @@ def main():
         if args.create:
             created=json.loads(gh('project','create','--owner',OWNER,'--title','Adenly — ЛЗ 9: екі спринт','--format','json'));number=created['number']
             print('Created project:',created.get('url',number))
-        query='''query($owner:String!,$number:Int!){user(login:$owner){projectV2(number:$number){id url readme fields(first:100){pageInfo{hasNextPage}nodes{... on ProjectV2Field{id name} ... on ProjectV2SingleSelectField{id name options{id name color description}} ... on ProjectV2IterationField{id name}}}}}}'''
+        query='''query($owner:String!,$number:Int!){user(login:$owner){projectV2(number:$number){id url readme items(first:1){totalCount} fields(first:100){pageInfo{hasNextPage}nodes{... on ProjectV2Field{id name} ... on ProjectV2SingleSelectField{id name options{id name color description}} ... on ProjectV2IterationField{id name}}}}}}'''
         project=gql(query,owner=OWNER,number=number)['user']['projectV2']
         if not project:raise RuntimeError('Project inaccessible; nothing else changed')
         if project['fields']['pageInfo']['hasNextPage']:raise RuntimeError('Field list incomplete; no replacement performed')
@@ -44,7 +44,13 @@ def main():
         # Preserve existing options and item assignments; status migration is an explicit UI step.
         names={o['name'] for o in status['options']};wanted={o['name'] for o in OPTIONS}
         if names!=wanted:
-            print('UI action required: safely map current Status options',sorted(names),'to',sorted(wanted))
+            if project['items']['totalCount']==0:
+                payload={'query':'mutation($input:UpdateProjectV2FieldInput!){updateProjectV2Field(input:$input){projectV2Field{... on ProjectV2SingleSelectField{id name}}}}',
+                         'variables':{'input':{'fieldId':status['id'],'singleSelectOptions':OPTIONS}}}
+                result=subprocess.run(['gh','api','graphql','--input','-'],input=json.dumps(payload),check=True,capture_output=True,text=True)
+                if json.loads(result.stdout).get('errors'):raise RuntimeError(result.stdout)
+            else:
+                raise RuntimeError('Nonempty project: Status migration requires UI mapping to preserve existing assignments; no statuses replaced.')
         for name,(kind,opts) in FIELDS.items():
             if name in fields:
                 if name=='Sprint' and not {'S1','S2'}.issubset({x['name'] for x in fields[name].get('options',[])}):

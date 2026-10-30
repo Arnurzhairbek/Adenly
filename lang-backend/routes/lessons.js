@@ -5,14 +5,7 @@ const upload = require('../middleware/uploadMiddleware');
 const adminMiddleware = require('../middleware/adminMiddleware');
 
 // 📘 Получить все уроки по курсу
-router.get('/course/:courseId', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM lessons WHERE course_id = $1 ORDER BY id ASC', [req.params.courseId]);
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ message: 'Ошибка при получении уроков', error: err.message });
-  }
-});
+router.get('/course/:courseId', require('../controllers/courseLessonsController').listCourseLessons);
 
 // 📗 Добавить урок с медиафайлом
 router.post('/', adminMiddleware, upload.single('media'), async (req, res) => {

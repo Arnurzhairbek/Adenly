@@ -289,6 +289,10 @@ async function apiRequest(endpoint, method = "GET", body = null, token = null, o
 
 // ==================== АУТЕНТИФИКАЦИЯ ====================
 export const auth = {
+  updateProfile: async (name) => {
+    const token = localStorage.getItem('token');
+    return apiRequest('/auth/me', 'PUT', { name }, token, { requestName: 'Профильді сақтау' });
+  },
   // Тіркелу
   register: async (userData) => {
     return apiRequest("/auth/register", "POST", userData, null, { requestName: "Пайдаланушыны тіркеу" });

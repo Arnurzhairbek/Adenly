@@ -31,6 +31,7 @@
   "scripts/build_report.py": "4198e059c121c37bc0407df5dc1ffc63f08310102da28ac8e6af078d139cec8f",
   "scripts/create_simulation.py": "6af4997989f674ec3becc85cf31bbf9b315b5596434baaaaa53b6eb3bea61295",
   "scripts/export_current_board.py": "442957d43eba2a2b21af4f44bd51154846f9c52ac24ce1a439c77bf15279174c",
-  "scripts/setup_board.py": "aa558edce1993c345325ebe8a6da4734db437c7f2e1cedd02fe7e7ed6168043d",
+  "scripts/setup_board.py": "88c5a777c57d9b47a9652a148e3159dc839fdef39f4896b019acafb1502f4d90",
+  "scripts/sync_real_backlog.py": "16fe6d02824e46c45de7daf55a1b95686b6b7f3fc7bd9d2ed6968cf6eba5f111",
   "scripts/test_metrics.py": "2b7b7a2192c47424925628c078e5ddc3e2a9a27f93f87f6eedf9fc308e18de19"
 }

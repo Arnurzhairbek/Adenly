@@ -45,6 +45,18 @@ async function main() {
   check('access token identity',()=>assert.equal(claims.id,user.id));
   r=await request('/api/auth/me','GET',undefined,token);
   check('own profile',()=>assert.equal(r.body.id,user.id));
+  r=await request('/api/auth/me','PUT',{name:'Жаңартылған ат'});
+  check('anonymous profile update rejected',()=>assert.equal(r.status,401));
+  r=await request('/api/auth/me','PUT',{name:'   '},token);
+  check('blank profile name rejected',()=>assert.equal(r.status,400));
+  r=await request('/api/auth/me','PUT',{name:42},token);
+  check('non-text profile name rejected',()=>assert.equal(r.status,400));
+  r=await request('/api/auth/me','PUT',{name:'x'.repeat(101)},token);
+  check('oversized profile name rejected',()=>assert.equal(r.status,400));
+  r=await request('/api/auth/me','PUT',{name:'  Жаңартылған ат  ',role:'admin',email:'other@example.com',id:2147483647},token);
+  check('profile update returns safe fields',()=>{assert.equal(r.status,200);assert.equal(r.body.name,'Жаңартылған ат');assert.equal(r.body.role,'user');assert.equal(r.body.email,email);assert.equal(r.body.id,user.id);assert.equal(r.body.password,undefined)});
+  r=await request('/api/auth/me','GET',undefined,token);
+  check('profile persists on reload',()=>assert.equal(r.body.name,'Жаңартылған ат'));
   r=await request('/api/progress/user/'+user.id);
   check('protected API without token',()=>assert.equal(r.status,401));
   const expired=jwt.sign({id:user.id,role:'user',purpose:'access'},process.env.JWT_SECRET,{expiresIn:-1});
@@ -57,7 +69,22 @@ async function main() {
   r=await request('/api/courses');
   check('seeded course list',()=>{assert.equal(r.status,200);assert.ok(r.body.length>0)});
   const course=r.body[0];
+  r=await request('/api/courses/'+course.id+'/lessons');
+  const canonicalLessons=r.body;
+  check('canonical course lessons route',()=>{assert.equal(r.status,200);assert.ok(r.body.length>0)});
+  r=await request('/api/courses/invalid/lessons');
+  check('invalid course ID rejected',()=>assert.equal(r.status,400));
+  r=await request('/api/courses/2147483647/lessons');
+  check('missing course returns 404',()=>assert.equal(r.status,404));
+  const emptyCourse=(await pool.query("INSERT INTO courses (title) VALUES ('QA empty course') RETURNING id")).rows[0];
+  try {
+    r=await request('/api/courses/'+emptyCourse.id+'/lessons');
+    check('existing course without lessons returns empty list',()=>{assert.equal(r.status,200);assert.deepEqual(r.body,[])});
+  } finally {
+    await pool.query('DELETE FROM courses WHERE id=$1',[emptyCourse.id]);
+  }
   r=await request('/api/lessons/course/'+course.id);
+  check('legacy and canonical lessons agree',()=>assert.deepEqual(r.body,canonicalLessons));
   check('course lessons',()=>{assert.equal(r.status,200);assert.ok(r.body.length>0);assert.ok(r.body.every(l=>l.course_id===course.id))});
   const lesson=r.body[0];
   r=await request('/api/lessons/'+lesson.id);

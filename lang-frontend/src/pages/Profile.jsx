@@ -25,7 +25,7 @@ import { formatDateKZ } from "../utils/dateFormatter";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, loadUser } = useAuth();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -75,13 +75,11 @@ export default function Profile() {
     setSaving(true);
 
     try {
-      // Здесь можно добавить API для обновления профиля
-      // Пока просто показываем сообщение
-      toast.success("Профиль жаңартылды! (Функция бэкендте іске қосылады)");
-      
-      // Обновляем локальное состояние
-      const updatedUser = { ...user, name: formData.name, email: formData.email };
+      const updatedUser = await auth.updateProfile(formData.name);
       setUser(updatedUser);
+      setFormData(prev => ({ ...prev, name: updatedUser.name }));
+      await loadUser();
+      toast.success('Профиль сақталды!');
       
       // Очищаем поля
       setFormData(prev => ({ ...prev, currentPassword: "", newPassword: "", confirmPassword: "" }));
