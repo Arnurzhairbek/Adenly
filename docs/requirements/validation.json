@@ -1,0 +1,24 @@
+{
+  "document": "ADENLY-TZ-01",
+  "version": "1.0",
+  "date": "05.11.2026",
+  "source_repository_head": "979bc91434f46519e8f85c9f4af7e2121035b747",
+  "requirements": 32,
+  "functional": 20,
+  "nonfunctional": 12,
+  "unique_acceptance_scenarios": 31,
+  "matrix_rows": 32,
+  "stage_counts": {
+    "D": 21,
+    "M": 10,
+    "O": 1
+  },
+  "traceability": "Every requirement has an acceptance test; AT-22 covers two UI/platform requirements",
+  "all_requirement_ids_unique": true,
+  "all_acceptance_outcomes": "Not run",
+  "limitations": [
+    "Proposed specification; customer/operator approval pending",
+    "Full MVP not promised by 10.12.2026",
+    "Current implementation is not certified compliant by this document"
+  ]
+}
