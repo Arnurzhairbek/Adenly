@@ -1,10 +1,14 @@
 {
-  "README.md": "42acccf385da25f088812d71e58e6e9f249abd8fb4fcf82e9d212a2ab6acbb33",
-  "Adenly_TZ_kk.md": "dd19e669c440f9817a27354767ef6ba275475b0fc601a42e40fffb1591c18a3e",
-  "Adenly_TZ_kk.docx": "3a11ec380ea5e1856a409608b634f16e513e240676e39560cb9ce85fd1e70d08",
-  "Adenly_TZ_kk.pdf": "6406c84681625f0d33c5e7e0b008ff5debb821630c1b89d523e8f867314d4b8b",
-  "requirements.csv": "6c7a2ebeefe769e681877a4980212be46dbda42c14d1e96a2aa9db912cf4dbb5",
-  "acceptance_tests.csv": "7e1b7ff0b133191f8242e04023fb26af50d5878ac241c8a3647542eef0bcff69",
-  "validation.json": "fa8072e0677f8260dc39803e41edca18b08c11da91796174902b99df5afce52b",
-  "build_tz.py": "bf7f3c42b63e2c7685f28962cc02796b653b35bfa70f75eb520daac2a129ef6a"
+  "README.md": "c29a6eab2338c015a7fc3bb09a92d5e0b3fea1038cc171e5721f4402c8779cb3",
+  "Adenly_TZ_kk.md": "ebc8e33f5b4f2fb270b9cede93e3e5cd03ba73fce2cd4e55eaa86812c34578e7",
+  "Adenly_TZ_kk.docx": "7392334318813a40463927a6d53af11ff387c43b487bb838e5f114f67fe9cd4a",
+  "Adenly_TZ_kk.pdf": "de895da425d9afd64925bac8a557bbef5ed29b06096f164b46581e6147ba5fc6",
+  "requirements.csv": "07803bc5e68c079f2d9ee7dabb9c3af8818d34bd38318f1cf49dd1857ace53c2",
+  "acceptance_tests.csv": "635213153ea690726ceda58275037cb98b2bcc1cc131086aef23e24a9a817a43",
+  "validation.json": "66351bcad711e6f66ca462bcc19e124060c54f716b189a8f9701a831ad038342",
+  "build_tz.py": "ea988171c09746cdc540bf973f90686b724cac3b3395e4c6778e15271a22eaf2",
+  "semester_plan.py": "b52255c81b3301a6207470d4cbaaa025af6f508026c4cce4453c38d451d814dd",
+  "semester_plan.md": "7a17ce29475cad5229a3b5f038f5d3c886aee2776c676df2a19397c43af985ce",
+  "semester_plan.csv": "ceeea39f1bf2c563de8262e34908683c5feabaecb92a384b9542fe92a07a9476",
+  "Adenly_15_aptalyk_zhospar.xlsx": "6a13aa5ea64cf365066784ebc1674af752908f506aac520bd8d40d1e54b9c345"
 }

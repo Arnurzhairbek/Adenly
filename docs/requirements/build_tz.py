@@ -3,9 +3,11 @@
 from pathlib import Path
 import csv,json,re,hashlib,zipfile,subprocess
 from datetime import date
+from semester_plan import section_markdown,write_plan,CURRENT_WEEK,TARGET_WEEK,CURRENT_EVIDENCE
 
 ROOT=Path(__file__).resolve().parent
 DATE='05.11.2026'
+VERSION='1.1'
 # ID, stage, requirement, acceptance test, current evidence/reference
 FR=[
 ('FR-01','D','Синтетикалық аккаунтпен кіру','Расталған synthetic студент дұрыс парольмен кіріп жеке кабинетке өтеді; қате пароль және расталмаған аккаунт қабылданбайды; хабарлама түсінікті.','AT-01','#2; auth/login'),
@@ -287,11 +289,12 @@ def write_sources():
         if req[0].startswith('FR'):
             id,stage,title,criterion,test,ref=req
         else:id,stage,title,criterion,test=req;ref='ТЗ: нысаналы NFR; acceptance бөлек қажет'
-        rows.append(dict(requirement_id=id,stage=stage,title=title,acceptance_criterion=criterion,test_id=test,source_or_module=ref,status='Proposed',evidence=''))
-        tests.append(dict(test_id=test,requirement_id=id,stage=stage,preconditions='Synthetic деректер және тиісті рөл/орта; ТЗ §11. M/O үшін кезең gate-і бекітілген.',procedure=steps[test],expected_result=criterion,status='Not run',actual_result='',evidence='',tester='',tested_at=''))
+        planned_week=str(TARGET_WEEK[id]) if id in TARGET_WEEK else '15-аптадан кейін, бөлек бекітіледі'
+        rows.append(dict(requirement_id=id,stage=stage,title=title,acceptance_criterion=criterion,test_id=test,source_or_module=ref,status='Proposed',evidence='',planned_acceptance_week=planned_week,week10_implementation_evidence=CURRENT_EVIDENCE[id]))
+        tests.append(dict(test_id=test,requirement_id=id,stage=stage,preconditions='Synthetic деректер және тиісті рөл/орта; ТЗ §11. M/O үшін кезең gate-і бекітілген.',procedure=steps[test],expected_result=criterion,status='Not run',actual_result='',evidence='',tester='',tested_at='',planned_week=planned_week))
     for name,records in [('requirements.csv',rows),('acceptance_tests.csv',tests)]:
         with (ROOT/name).open('w',encoding='utf-8-sig',newline='') as f:
-            w=csv.DictWriter(f,fieldnames=list(records[0]));w.writeheader();w.writerows(records)
+            w=csv.DictWriter(f,fieldnames=list(records[0]),lineterminator='\n');w.writeheader();w.writerows(records)
     assert len({r['requirement_id'] for r in rows})==32
     assert len({r['test_id'] for r in tests})==31
     assert {r['test_id'] for r in rows}=={r['test_id'] for r in tests}
@@ -323,10 +326,10 @@ def render():
     sec.top_margin=Cm(1.7);sec.bottom_margin=Cm(1.7);sec.left_margin=Cm(1.7);sec.right_margin=Cm(1.7)
     report.styles['Normal'].font.name='DejaVu Sans';report.styles['Normal'].font.size=Pt(9)
     for heading,size in [('Title',23),('Heading 1',17),('Heading 2',12)]:report.styles[heading].font.name='DejaVu Sans';report.styles[heading].font.size=Pt(size)
-    sec.header.paragraphs[0].text='ADENLY · ADENLY-TZ-01 · 1.0 · 05.11.2026'
+    sec.header.paragraphs[0].text='ADENLY · ADENLY-TZ-01 · 1.1 · 05.11.2026'
     footer=sec.footer.paragraphs[0];footer.text='Бекітуге арналған жоба · '
     field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'PAGE');footer._p.append(field)
-    cover=['ADENLY','ТЕХНИКАЛЫҚ ТАПСЫРМА','Тіл үйренуге арналған веб-платформаны дамыту және қабылдау','ADENLY-TZ-01 · Нұсқа 1.0 · 05.11.2026','Күйі: бекітуге арналған жоба','Жайрбек Арнұр — Project Manager','Байғұл Шыңғыс — Business / System Analyst','Есеркенов Абдулазиз — Technical Lead / Developer','Әшімбай Қайсар — Data / QA Analyst','Оқытушы: Некесова А.А.','Тапсырыс беруші және қабылдаушы: [толтырылады]']
+    cover=['ADENLY','ТЕХНИКАЛЫҚ ТАПСЫРМА','15 апталық жоба: қазір 10-апта, 14-апта RC, 15-апта қорғау','ADENLY-TZ-01 · Нұсқа 1.1 · 05.11.2026','Күйі: бекітуге арналған жоба','Жайрбек Арнұр — Project Manager','Байғұл Шыңғыс — Business / System Analyst','Есеркенов Абдулазиз — Technical Lead / Developer','Әшімбай Қайсар — Data / QA Analyst','Оқытушы: Некесова А.А.','Тапсырыс беруші және қабылдаушы: [толтырылады]']
     flow=[Spacer(1,65)]
     for i,line in enumerate(cover):
         if i<2:report.add_heading(line,0 if i==0 else 1)
@@ -372,22 +375,30 @@ def render():
     report.save(ROOT/'Adenly_TZ_kk.docx')
     def page(canvas,d):
         canvas.saveState();canvas.setFont('TZ',7);canvas.setFillColor(colors.HexColor('#456071'))
-        canvas.drawString(48,817,'ADENLY · ADENLY-TZ-01 · 1.0 · 05.11.2026')
+        canvas.drawString(48,817,'ADENLY · ADENLY-TZ-01 · 1.1 · 05.11.2026')
         canvas.drawString(48,26,'Бекітуге арналған жоба');canvas.drawRightString(547,26,str(d.page));canvas.restoreState()
     SimpleDocTemplate(str(ROOT/'Adenly_TZ_kk.pdf'),pagesize=(595.28,841.89),leftMargin=48,rightMargin=48,topMargin=46,bottomMargin=43,title='Adenly — техникалық тапсырма',author='Adenly командасы').build(flow,onFirstPage=page,onLaterPages=page)
 
 def main():
+    global doc
+    doc=doc.replace('Нұсқа: 1.0.','Нұсқа: 1.1.')
+    doc=re.sub(r'## 10\. Кезеңдер, мерзім және өзгерістер\n.*?(?=## 11\.)',lambda m:section_markdown()+'\n',doc,flags=re.S)
+    doc+='| 1.1 | 05.11.2026 | Қазір 10-апта екенін ескеріп, академиялық 1–15 апталық actual/plan, 14-апта RC және 15-апта қабылдау енгізілді | Күндердің академиялық сәйкестігі ұсыныс; өткен факт дәлелмен ғана |\n'
+    plan=write_plan()
     rows,tests=write_sources();render()
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-    validation=dict(document='ADENLY-TZ-01',version='1.0',date=DATE,source_repository_head=head,
+    validation=dict(document='ADENLY-TZ-01',version=VERSION,date=DATE,source_repository_head=head,
                     requirements=len(rows),functional=len(FR),nonfunctional=len(NFR),
                     unique_acceptance_scenarios=len({t['test_id'] for t in tests}),matrix_rows=len(tests),
                     stage_counts={s:sum(r['stage']==s for r in rows) for s in ['D','M','O']},
                     traceability='Every requirement has an acceptance test; AT-22 covers two UI/platform requirements',
                     all_requirement_ids_unique=True,all_acceptance_outcomes='Not run',
+                    academic_weeks=len(plan),current_week=CURRENT_WEEK,release_candidate_week=14,final_acceptance_week=15,
+                    calendar_mapping='Inferred Monday weeks from 2026-11-05 = week 10; subject to official academic calendar',
+                    weekly_status_counts={s:sum(r['status']==s for r in plan) for s in ['Расталмаған','Ішінара','Ағымдағы','Жоспар']},
                     limitations=['Proposed specification; customer/operator approval pending','Full MVP not promised by 10.12.2026','Current implementation is not certified compliant by this document'])
     (ROOT/'validation.json').write_text(json.dumps(validation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    targets=['README.md','Adenly_TZ_kk.md','Adenly_TZ_kk.docx','Adenly_TZ_kk.pdf','requirements.csv','acceptance_tests.csv','validation.json','build_tz.py']
+    targets=['README.md','Adenly_TZ_kk.md','Adenly_TZ_kk.docx','Adenly_TZ_kk.pdf','requirements.csv','acceptance_tests.csv','validation.json','build_tz.py','semester_plan.py','semester_plan.md','semester_plan.csv','Adenly_15_aptalyk_zhospar.xlsx']
     manifest={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in targets}
     (ROOT/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     with zipfile.ZipFile(ROOT/'Adenly_TZ_Paket.zip','w',zipfile.ZIP_DEFLATED) as z:

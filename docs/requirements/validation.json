@@ -1,8 +1,8 @@
 {
   "document": "ADENLY-TZ-01",
-  "version": "1.0",
+  "version": "1.1",
   "date": "05.11.2026",
-  "source_repository_head": "979bc91434f46519e8f85c9f4af7e2121035b747",
+  "source_repository_head": "4cfd47e455eba92fab449fbf936d317c55fd8cb8",
   "requirements": 32,
   "functional": 20,
   "nonfunctional": 12,
@@ -16,6 +16,17 @@
   "traceability": "Every requirement has an acceptance test; AT-22 covers two UI/platform requirements",
   "all_requirement_ids_unique": true,
   "all_acceptance_outcomes": "Not run",
+  "academic_weeks": 15,
+  "current_week": 10,
+  "release_candidate_week": 14,
+  "final_acceptance_week": 15,
+  "calendar_mapping": "Inferred Monday weeks from 2026-11-05 = week 10; subject to official academic calendar",
+  "weekly_status_counts": {
+    "Расталмаған": 5,
+    "Ішінара": 4,
+    "Ағымдағы": 1,
+    "Жоспар": 5
+  },
   "limitations": [
     "Proposed specification; customer/operator approval pending",
     "Full MVP not promised by 10.12.2026",
