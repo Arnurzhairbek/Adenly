@@ -4,24 +4,11 @@
 
 Тіл үйрену платформасының мақсаты, пайдаланушылар/рөлдер, көлем шекарасы, функционалдық талаптар, бизнес ережелері, БД моделі, API, қауіпсіздік, өнімділік, backup/restore, кезеңдер және қабылдау тәртібі бір құжатқа жиналды.
 
-## 15 апталық жоспар: не жасалды, не қалды?
+## Базалық апталық жоспар — Word
 
-**[1–15 апталық толық жоспарды ашу](semester_plan.md)** · **[Excel / Calc жоспары](Adenly_15_aptalyk_zhospar.xlsx)** · [CSV](semester_plan.csv)
+**[Word файлын жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_Aptalyk_zhospar.docx)** · [Кестені браузерде оқу](basic_weekly_plan.md)
 
-Әр аптаға «не жасалды», «не істелуі керек», жауапты, қабылданатын нәтиже, ТЗ талаптары және дәлел/commit көрсетілген. Қазір 10-апта; 14-апта — release candidate және алдын ала қорғау, 15-апта — финалдық қабылдау/қорғау. Бұрынғы 10.12.2026 тапсыру baseline-ы сақталған.
-
-| Апталар | Қазіргі мәлімет | Қалған жұмыс |
-|---|---|---|
-| 1–5 | Сол аптаға даталанған құжаттар жоқ; бар файлдардың бәрі сол кезде жасалды деп айтылмайды | Бастапқы паспорт/талап/модель/прототип дәлелдерін бар болса қосу, жоқ болса 10-аптада ағымдағы күнмен толықтыру |
-| 6–9 | Код/CI/backlog, модель/тәуекел, SoW/бюджет, симуляция және екі код түзетуі Git-та бар | Ашық acceptance/security/browser/restore және ресми бекітулер |
-| **10 — қазір** | ТЗ 1.0 және жаңа 1.1 жоспар, 32 талап/31 сынақ | Scope/курс бекіту, #4/#6 review, қалған effort және #12 жұмыс пакеттері |
-| 11 | Болашақ жоспар | Қауіпсіз test submit, server start/time/attempt, transaction және parallel тест |
-| 12 | Болашақ жоспар | Прогресс/нәтиже/сертификат және D қорғаныс gate-і |
-| 13 | Болашақ жоспар | Интеграция, synthetic migration, оқшау restore және нұсқаулық |
-| 14 | Болашақ жоспар | Барлық D acceptance, P1/P2 жоқ RC және алдын ала қорғау |
-| 15 | Болашақ жоспар | 07.12 ұсыну, 08–10.12 қарау, оқыту/тапсыру және финалдық қорғау |
-
-**Күндер есептік:** 05.11.2026=10-апта және апта басы дүйсенбі деп алынды; ресми академиялық күнтізбе расталса сәйкестендіріледі. Апта нөмірі, ЛЗ нөмірі және бұрынғы W1–W8 релиз слоттары бөлек ұғымдар. Орындау пайызы ойдан қойылмаған.
+15 апталық қарапайым кесте: апта, жұмыс кезеңі және жалпы жұмыс мазмұны. Ағымдағы 10-апта белгіленген. Тапсырмалар техникалық бөлшектерге бөлінбеген.
 
 ## Оқу және жүктеу
 
@@ -33,7 +20,7 @@
 | Толық пакет | [ZIP](Adenly_TZ_Paket.zip) | [ZIP жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_TZ_Paket.zip) |
 | Талаптар тізілімі | [requirements.csv](requirements.csv) | Excel/LibreOffice Calc-та ашылады |
 | Қабылдау матрицасы | [acceptance_tests.csv](acceptance_tests.csv) | Expected/actual/evidence/tester/date өрістері бар |
-| 15 апталық жоспар | [semester_plan.md](semester_plan.md) | [XLSX жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_15_aptalyk_zhospar.xlsx) |
+| Базалық апталық жоспар | [Кесте](basic_weekly_plan.md) | [Word жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_Aptalyk_zhospar.docx) |
 
 ## Құжатты қалай қолдану керек?
 

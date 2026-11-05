@@ -1,10 +1,7 @@
-# Adenly — 15 апталық жоба жоспары
+# Adenly — базалық апталық жоспар
 
-**Қазір: 10-апта.** 14-апта — алдын ала қорғау/release candidate, 15-апта — финалдық қабылдау/қорғау.
+[Word файлын жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_Aptalyk_zhospar.docx)
 
-- [Әр аптаның толық «не жасалды / не істелуі керек» жоспары](../requirements/semester_plan.md)
-- [Excel / LibreOffice Calc кестесі](../requirements/Adenly_15_aptalyk_zhospar.xlsx)
-- [CSV](../requirements/semester_plan.csv)
-- [ТЗ 1.1 және Word/PDF](../requirements/README.md)
+[15 апталық кестені браузерде оқу](../requirements/basic_weekly_plan.md)
 
-Күндер — 05.11.2026=10-апта жорамалымен есептелген сәйкестендіру; академиялық күнтізбемен растау қажет. Өткен факт, расталмаған жұмыс және болашақ жоспар бөлек көрсетілген. ЛЗ 5-тегі 19.10–10.12 сегіз релиз слоты академиялық 8–15 апталарға сәйкес келеді, оларды академиялық 1–8 апта деп шатастырмаңыз.
+Ағымдағы кезең — 10-апта. Кестеде тек жалпы жұмыс кезеңдері берілген.

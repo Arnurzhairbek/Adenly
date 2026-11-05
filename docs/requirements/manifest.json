@@ -1,14 +1,17 @@
 {
-  "README.md": "c29a6eab2338c015a7fc3bb09a92d5e0b3fea1038cc171e5721f4402c8779cb3",
+  "README.md": "fe05b27da99f4b3644b474799e01bc4eba204ac3660c936fa4753f229f04e026",
   "Adenly_TZ_kk.md": "ebc8e33f5b4f2fb270b9cede93e3e5cd03ba73fce2cd4e55eaa86812c34578e7",
   "Adenly_TZ_kk.docx": "7392334318813a40463927a6d53af11ff387c43b487bb838e5f114f67fe9cd4a",
   "Adenly_TZ_kk.pdf": "de895da425d9afd64925bac8a557bbef5ed29b06096f164b46581e6147ba5fc6",
   "requirements.csv": "07803bc5e68c079f2d9ee7dabb9c3af8818d34bd38318f1cf49dd1857ace53c2",
   "acceptance_tests.csv": "635213153ea690726ceda58275037cb98b2bcc1cc131086aef23e24a9a817a43",
   "validation.json": "66351bcad711e6f66ca462bcc19e124060c54f716b189a8f9701a831ad038342",
-  "build_tz.py": "ea988171c09746cdc540bf973f90686b724cac3b3395e4c6778e15271a22eaf2",
+  "build_tz.py": "8645b5612077686511054c710727c5a75cbf0f7c7b3f42dd8f2e62215c24df95",
   "semester_plan.py": "b52255c81b3301a6207470d4cbaaa025af6f508026c4cce4453c38d451d814dd",
   "semester_plan.md": "7a17ce29475cad5229a3b5f038f5d3c886aee2776c676df2a19397c43af985ce",
   "semester_plan.csv": "ceeea39f1bf2c563de8262e34908683c5feabaecb92a384b9542fe92a07a9476",
-  "Adenly_15_aptalyk_zhospar.xlsx": "6a13aa5ea64cf365066784ebc1674af752908f506aac520bd8d40d1e54b9c345"
+  "Adenly_15_aptalyk_zhospar.xlsx": "6a13aa5ea64cf365066784ebc1674af752908f506aac520bd8d40d1e54b9c345",
+  "Adenly_Aptalyk_zhospar.docx": "5bc31b7beb4c07dc6a19f99d0a6927542feebf9c986b3d2eff6e289c73405595",
+  "basic_weekly_plan.md": "19e80ed8ce7e2faf26941b598b3d6f430471ddd2816f763e41a6e521bfd372cf",
+  "build_basic_plan.py": "bd2251e9e5770e77cf59ae18be2fcec84b1c90e91c628e8de275b63f43bca478"
 }

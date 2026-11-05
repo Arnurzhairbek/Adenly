@@ -1,9 +1,13 @@
 # Adenly
 Adenly IT Project - Team Project
 
+## Базалық апталық жоспар
+
+[15 апталық қарапайым кесте — Word жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_Aptalyk_zhospar.docx). Қазір 10-апта. [Браузерде оқу](docs/requirements/basic_weekly_plan.md).
+
 ## Техникалық тапсырма — ТЗ
 
-[Adenly ТЗ, қазақша, 1.1 / 05.11.2026](docs/requirements/README.md): 32 талап және **1–15 апталық жоба жоспары — қазір 10-апта, не жасалды / не қалды**, 14-апта RC және 15-апта қорғау. Word, PDF, апталық Excel/Calc және толық ZIP қолжетімді.
+[Adenly ТЗ, қазақша](docs/requirements/README.md): өнім талаптары мен қабылдау критерийлері. Базалық апталық жоспар жоғарыда жеке Word файлымен берілген.
 
 ## Нақты жұмыс backlog-ы
 

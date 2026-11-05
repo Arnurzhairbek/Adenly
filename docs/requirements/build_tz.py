@@ -398,7 +398,7 @@ def main():
                     weekly_status_counts={s:sum(r['status']==s for r in plan) for s in ['Расталмаған','Ішінара','Ағымдағы','Жоспар']},
                     limitations=['Proposed specification; customer/operator approval pending','Full MVP not promised by 10.12.2026','Current implementation is not certified compliant by this document'])
     (ROOT/'validation.json').write_text(json.dumps(validation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    targets=['README.md','Adenly_TZ_kk.md','Adenly_TZ_kk.docx','Adenly_TZ_kk.pdf','requirements.csv','acceptance_tests.csv','validation.json','build_tz.py','semester_plan.py','semester_plan.md','semester_plan.csv','Adenly_15_aptalyk_zhospar.xlsx']
+    targets=['README.md','Adenly_TZ_kk.md','Adenly_TZ_kk.docx','Adenly_TZ_kk.pdf','requirements.csv','acceptance_tests.csv','validation.json','build_tz.py','semester_plan.py','semester_plan.md','semester_plan.csv','Adenly_15_aptalyk_zhospar.xlsx','Adenly_Aptalyk_zhospar.docx','basic_weekly_plan.md','build_basic_plan.py']
     manifest={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in targets}
     (ROOT/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     with zipfile.ZipFile(ROOT/'Adenly_TZ_Paket.zip','w',zipfile.ZIP_DEFLATED) as z:
