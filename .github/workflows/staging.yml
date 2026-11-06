@@ -56,7 +56,7 @@ jobs:
             gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$candidate&branch=main&status=success" --jq '.workflow_runs | length' | python3 -c 'import sys; assert int(sys.stdin.read()) > 0'
           fi
           echo "sha=$candidate" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ steps.revision.outputs.sha }}
           persist-credentials: false
