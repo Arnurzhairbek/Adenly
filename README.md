@@ -1,6 +1,14 @@
 # Adenly
 Adenly IT Project - Team Project
 
+## DORA дашборды
+
+[**Дашбордты браузерде ашу →**](docs/delivery/report/README.md)
+
+![Adenly DORA — нақты GitHub деректері](docs/delivery/report/dora_dashboard.png)
+
+Төрт метрика, апталық release графигі және дерек сапасы. Сурет — көрсетілген уақыттағы snapshot. Жаңа өлшем үшін [DORA dashboard](https://github.com/Arnurzhairbek/Adenly/actions/workflows/dora.yml) → **Run workflow → main**; нәтиже прогонның **Summary** бөлімінде көрінеді. Репозиторий бетіндегі snapshot өздігінен жаңармайды.
+
 ## Базалық апталық жоспар
 
 [15 апталық қарапайым кесте — Word жүктеу](https://github.com/Arnurzhairbek/Adenly/raw/refs/heads/main/docs/requirements/Adenly_Aptalyk_zhospar.docx). Қазір 10-апта. [Браузерде оқу](docs/requirements/basic_weekly_plan.md).

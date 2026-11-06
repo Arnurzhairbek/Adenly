@@ -132,40 +132,10 @@ def collect(api,environment):
     except (urllib.error.HTTPError,urllib.error.URLError) as exc:errors.append({'operation':'Actions read','error':str(exc)})
     return deployments,raw,runs,complete,errors
 
-def render(report,runs,output):
-    os.environ.setdefault('MPLCONFIGDIR','/tmp/adenly-dora-mpl')
-    os.environ.setdefault('XDG_CACHE_HOME','/tmp/adenly-dora-cache')
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    plt.rcParams['font.family']='DejaVu Sans'
-    names=['deployment_frequency','lead_time','change_failure_rate','recovery_time']
-    labels=['Орналастыру жиілігі','Коммиттен стендке дейін','Сәтсіз өзгерістер үлесі','Қалпына келтіру уақыты']
-    fig,axes=plt.subplots(2,2,figsize=(12,6))
-    for ax,key,label in zip(axes.flat,names,labels):
-        m=report['metrics'][key];ax.axis('off')
-        ax.text(.04,.83,label,fontsize=15,weight='bold',transform=ax.transAxes)
-        ax.text(.04,.43,'N/A' if m['value'] is None else f'{m["value"]:.2f}',fontsize=30,color='#176B87',transform=ax.transAxes)
-        ax.text(.04,.22,m['unit']+' | '+m['level'],fontsize=10,transform=ax.transAxes)
-        ax.text(.04,.06,f'Бақылау саны: {m["samples"]}',fontsize=10,transform=ax.transAxes)
-    fig.suptitle('Adenly — нақты GitHub деректері | '+report['environment'],fontsize=17,weight='bold')
-    fig.text(.03,.01,'N/A = дерек жеткіліксіз. Жасыл CI deployment ретінде саналмайды. Шкала — жергілікті оқу шектері.',fontsize=9)
-    fig.tight_layout(rect=(0,.035,1,.94));fig.savefig(output/'dora_dashboard.png',dpi=160);plt.close(fig)
-    md='# Adenly — DORA дашборды\n\n'+f'Жиналған уақыт: {report["collected_at"]}. Орта: **{report["environment"]}**.\n\n'
-    md+=f'Терезе: {report["window_start"]} → {report["window_end"]}.\n\n'
-    md+='![DORA](dora_dashboard.png)\n\n| Метрика | Мән | Бірлік | Оқу шкаласындағы деңгей | Бақылау саны |\n|---|---:|---|---|---:|\n'
-    for key,label in zip(names,labels):
-        m=report['metrics'][key];val='N/A' if m['value'] is None else f'{m["value"]:.3f}'
-        md+=f'| {label} | {val} | {m["unit"]} | {m["level"]} | {m["samples"]} |\n'
-    md+=f'\nDeployments API толық: **{report["deployments_complete"]}**. Инцидент журналы бекітілген: **{report["incident_ledger_attested"]}**.\n\n'
-    md+='Lead time — әр deployment-тің head commit-інен алғашқы success-ке дейін. CFR тек ≥24 сағат бақылауы толық өзгерістер үшін; журнал белгісіз болса N/A. Recovery — нақты инциденттерден ғана; оқу жаттығуы қосылмайды.\n\n'
-    md+='Журналдағы белгілі түзету еңбегі: '+str(report['recorded_repair_person_hours'])+' адам-сағат. Толық шығын: '+('N/A — журнал толықтығы расталмаған' if report['repair_person_hours'] is None else str(report['repair_person_hours']))+'.\n\n'
-    md+='## CI тарихы (DORA deployment емес)\n\n| Прогон | Нәтиже | Толық elapsed, секунд |\n|---|---|---:|\n'
-    for run in sorted(runs,key=lambda r:r['created_at'],reverse=True)[:10]:
-        elapsed=(stamp(run['updated_at'])-stamp(run['run_started_at'])).total_seconds() if run.get('run_started_at') and run.get('status')=='completed' else None
-        md+=f'| [{run["id"]}]({run["html_url"]}) | {run["conclusion"]} | {elapsed if elapsed is not None else "N/A"} |\n'
-    if report['errors']:md+='\n## Дерек шектеулері\n\n'+'\n'.join('- '+e['operation']+': '+e['error'] for e in report['errors'])+'\n'
-    (output/'README.md').write_text(md,encoding='utf-8')
+def render(report,runs,output,deployments):
+    from dora_dashboard import render as render_dashboard
+    render_dashboard(report,runs,output,deployments)
+
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -173,6 +143,7 @@ def main():
     parser.add_argument('--environment',default='staging')
     parser.add_argument('--end',default=datetime.now(UTC).isoformat());parser.add_argument('--start')
     parser.add_argument('--output',type=Path,default=Path('docs/delivery/report'))
+    parser.add_argument('--summary',type=Path,help='Append a browser-readable table to the Actions job summary')
     parser.add_argument('--incidents',type=Path,default=Path('docs/delivery/incidents.csv'))
     parser.add_argument('--coverage',type=Path,default=Path('docs/delivery/incident_observation.csv'))
     args=parser.parse_args();end=stamp(args.end);start=stamp(args.start) if args.start else end-timedelta(days=28)
@@ -181,10 +152,16 @@ def main():
     deps,raw,runs,complete,errors=collect(GitHub(args.repo),args.environment)
     report=compute(deps,incidents,start,end,args.environment,complete,attested)
     report.update(collected_at=datetime.now(UTC).isoformat(),repository=args.repo,errors=errors)
+    if os.environ.get('GITHUB_RUN_ID'):
+        report['source_run_url']=f'https://github.com/{args.repo}/actions/runs/{os.environ["GITHUB_RUN_ID"]}'
     args.output.mkdir(parents=True,exist_ok=True)
     for name,obj in [('metrics.json',report),('deployments.raw.json',raw),('deployments.normalized.json',deps),('ci_runs.json',runs)]:
         (args.output/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    render(report,runs,args.output)
+    render(report,runs,args.output,deps)
+    if args.summary:
+        from dora_dashboard import markdown
+        with args.summary.open('a',encoding='utf-8') as stream:
+            stream.write(markdown(report,runs,image=False))
     print(json.dumps({'deployments_complete':complete,'successful_deployments':report['successful_deployments'],'errors':errors},ensure_ascii=False))
 
 if __name__=='__main__':main()
