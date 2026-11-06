@@ -4,6 +4,8 @@
 
 [**DORA дашбордын браузерде ашу →**](report/README.md) · [Жаңа есепті іске қосу](https://github.com/Arnurzhairbek/Adenly/actions/workflows/dora.yml). Workflow Summary ішінде төрт метрика кестесі көрсетіледі; артефактта PNG және бастапқы JSON деректері бар.
 
+[**Барлық төрт метрикасы санмен берілген оқу симуляциясы →**](simulation/README.md). Дерек ойдан құрастырылған: 3 release/апта, lead 4 сағат, CFR 16,67%, recovery 30 минут. Бұл нақты өлшемге немесе GitHub Deployments/incident журналына қосылмайды.
+
 Қазіргі CI және скриншоттағы ескі қызыл белгілердің түсіндірмесі: [CI күйі](ci-status.md). Нақты серверді дайындау: [host runbook](host-runbook.md). Қабылдау сценарийлері және жауаптылар: [acceptance](acceptance.md).
 
 ## Дайын нәтижелер

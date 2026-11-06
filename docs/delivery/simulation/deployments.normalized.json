@@ -1,0 +1,119 @@
+[
+  {
+    "id": "SIM-01",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-01",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-10T02:00:00Z",
+    "started_at": "2026-10-10T09:55:00Z",
+    "successful_at": "2026-10-10T10:00:00Z"
+  },
+  {
+    "id": "SIM-02",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-02",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-13T03:00:00Z",
+    "started_at": "2026-10-13T09:55:00Z",
+    "successful_at": "2026-10-13T10:00:00Z"
+  },
+  {
+    "id": "SIM-03",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-03",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-16T04:00:00Z",
+    "started_at": "2026-10-16T09:55:00Z",
+    "successful_at": "2026-10-16T10:00:00Z"
+  },
+  {
+    "id": "SIM-04",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-04",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-19T05:00:00Z",
+    "started_at": "2026-10-19T09:55:00Z",
+    "successful_at": "2026-10-19T10:00:00Z"
+  },
+  {
+    "id": "SIM-05",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-05",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-21T05:00:00Z",
+    "started_at": "2026-10-21T09:55:00Z",
+    "successful_at": "2026-10-21T10:00:00Z"
+  },
+  {
+    "id": "SIM-06",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-06",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-23T06:00:00Z",
+    "started_at": "2026-10-23T09:55:00Z",
+    "successful_at": "2026-10-23T10:00:00Z"
+  },
+  {
+    "id": "SIM-07",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-07",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-26T06:00:00Z",
+    "started_at": "2026-10-26T09:55:00Z",
+    "successful_at": "2026-10-26T10:00:00Z"
+  },
+  {
+    "id": "SIM-08",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-08",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-28T06:00:00Z",
+    "started_at": "2026-10-28T09:55:00Z",
+    "successful_at": "2026-10-28T10:00:00Z"
+  },
+  {
+    "id": "SIM-09",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-09",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-10-30T06:00:00Z",
+    "started_at": "2026-10-30T09:55:00Z",
+    "successful_at": "2026-10-30T10:00:00Z"
+  },
+  {
+    "id": "SIM-10",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-10",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-11-01T07:00:00Z",
+    "started_at": "2026-11-01T09:55:00Z",
+    "successful_at": "2026-11-01T10:00:00Z"
+  },
+  {
+    "id": "SIM-11",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-11",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-11-03T07:00:00Z",
+    "started_at": "2026-11-03T09:55:00Z",
+    "successful_at": "2026-11-03T10:00:00Z"
+  },
+  {
+    "id": "SIM-12",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-12",
+    "environment": "simulation-staging",
+    "operation": "release",
+    "committed_at": "2026-11-04T08:00:00Z",
+    "started_at": "2026-11-04T09:55:00Z",
+    "successful_at": "2026-11-04T10:00:00Z"
+  },
+  {
+    "id": "SIM-RB-09",
+    "sha": "SIMULATED-NOT-A-GIT-SHA-08",
+    "environment": "simulation-staging",
+    "operation": "rollback",
+    "committed_at": "2026-10-28T06:00:00Z",
+    "started_at": "2026-10-30T10:15:00Z",
+    "successful_at": "2026-10-30T10:35:00Z"
+  }
+]

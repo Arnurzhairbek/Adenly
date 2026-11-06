@@ -35,6 +35,9 @@ def weekly_counts(report, deployments):
 
 def markdown(report, runs, image=True):
     from dora import stamp
+    if report.get('data_mode') == 'simulation':
+        from dora_simulation import simulation_markdown
+        return simulation_markdown(report, image=image)
     lines = ['# Adenly — DORA дашборды', '',
              f'**Орта:** `{report["environment"]}` · **Терезе:** {report["window_days"]:g} күн · **Дерек:** нақты GitHub API', '',
              f'**Жаңартылған:** {report["collected_at"]} (UTC).', '',
@@ -104,10 +107,11 @@ def render(report, runs, output, deployments):
     from matplotlib.ticker import MaxNLocator
     plt.rcParams['font.family'] = 'DejaVu Sans'
     background, panel, foreground, muted = '#0b1324', '#17243b', '#f1f5f9', '#a8b9d0'
+    simulation = report.get('data_mode') == 'simulation'
     fig = plt.figure(figsize=(15, 8.4), facecolor=background)
-    fig.text(.045, .925, 'Adenly / DORA', color=foreground, fontsize=28, weight='bold')
-    fig.text(.045, .875, 'Инженерлік жеткізудің төрт метрикасы', color=muted, fontsize=13)
-    fig.text(.955, .93, report['environment'].upper() + '  /  НАҚТЫ ДЕРЕК', ha='right', color='#5eead4', fontsize=11)
+    fig.text(.045, .925, 'Adenly / DORA' + (' · DEMO' if simulation else ''), color=foreground, fontsize=28, weight='bold')
+    fig.text(.045, .875, 'ОЙДАН ҚҰРАСТЫРЫЛҒАН ОҚУ ДЕРЕКТЕРІ' if simulation else 'Инженерлік жеткізудің төрт метрикасы', color='#fbbf24' if simulation else muted, fontsize=13)
+    fig.text(.955, .93, 'ОҚУ СИМУЛЯЦИЯСЫ' if simulation else report['environment'].upper() + '  /  НАҚТЫ ДЕРЕК', ha='right', color='#fbbf24' if simulation else '#5eead4', fontsize=11)
     start, end = stamp(report['window_start']), stamp(report['window_end'])
     fig.text(.955, .88, f'{start:%d.%m.%Y} — {end:%d.%m.%Y}  ·  {report["window_days"]:g} күн', ha='right', color=muted, fontsize=10)
     for index, (key, label, english, unit) in enumerate(METRICS):
@@ -146,16 +150,18 @@ def render(report, runs, output, deployments):
     for spine in info.spines.values():
         spine.set_visible(False)
     info.text(.08, .87, 'Дерек жағдайы', color=foreground, fontsize=13, weight='bold')
-    rows = [f'API: {"толық" if report["deployments_complete"] else "толық емес"}',
+    rows = [('Демо жиыны: толық' if simulation else f'API: {"толық" if report["deployments_complete"] else "толық емес"}'),
             f'Сәтті release: {report["successful_deployments"] if report["deployments_complete"] else "N/A"}',
             f'≥24 сағат бақыланған: {report["mature_changes"] if report["deployments_complete"] else "N/A"}',
-            f'Журнал: {"бекітілген" if report["incident_ledger_attested"] else "бекітілмеген"}',
-            'N/A = дерек жеткіліксіз']
+            ('Журнал: оқу мысалы' if simulation else f'Журнал: {"бекітілген" if report["incident_ledger_attested"] else "бекітілмеген"}'),
+            'GitHub тарихынан алынбаған' if simulation else 'N/A = дерек жеткіліксіз']
     for index, text in enumerate(rows):
         info.text(.08, .69 - .13 * index, text, color=muted, fontsize=11)
-    fig.text(.045, .07, 'CI прогондары deployment ретінде саналмайды. Оқу drill-і нақты incident емес.', color=muted, fontsize=10)
+    fig.text(.045, .07, 'Барлық release пен incident ойдан құрастырылған. Бұл Adenly-дің нақты нәтижесі емес.' if simulation else 'CI прогондары deployment ретінде саналмайды. Оқу drill-і нақты incident емес.', color='#fbbf24' if simulation else muted, fontsize=10)
     collected = stamp(report['collected_at'])
-    fig.text(.045, .035, f'Жаңартылған: {collected:%d.%m.%Y %H:%M UTC}  ·  Дереккөз: GitHub Deployments + incident ledger  ·  Шкала: жергілікті оқу шектері', color=muted, fontsize=9)
+    source = 'синтетикалық CSV журналдары' if simulation else 'GitHub Deployments + incident ledger'
+    timestamp_label = 'Жасалған' if simulation else 'Жаңартылған'
+    fig.text(.045, .035, f'{timestamp_label}: {collected:%d.%m.%Y %H:%M UTC}  ·  Дереккөз: {source}  ·  Шкала: жергілікті оқу шектері', color=muted, fontsize=9)
     fig.savefig(output / 'dora_dashboard.png', dpi=160, facecolor=background)
     plt.close(fig)
     (output / 'README.md').write_text(markdown(report, runs), encoding='utf-8')
