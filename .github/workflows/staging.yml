@@ -69,6 +69,19 @@ jobs:
           printf '%s\n' "$KEY" > ~/.ssh/id_ed25519
           printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+      - name: Load host checks from the trusted workflow revision
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          path: .delivery-control
+          persist-credentials: false
+      - name: Verify host readiness before recording a deployment
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+        run: |
+          [[ "$STAGING_HOST" =~ ^[a-zA-Z0-9.-]+$ && "$STAGING_USER" =~ ^[a-zA-Z0-9_-]+$ ]]
+          ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=yes "$STAGING_USER@$STAGING_HOST" 'python3 - /srv/adenly-staging' < .delivery-control/scripts/staging_preflight.py
       - name: Create deployment record
         id: record
         env:

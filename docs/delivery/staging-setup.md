@@ -1,5 +1,7 @@
 # Тұрақты синтетикалық staging стендін қосу
 
+Орындауға арналған [host runbook](host-runbook.md), қауіпсіз `staging_init.py`/`staging_preflight.py` скрипттері және [QA сценарийлері](acceptance.md) дайын. `localhost:5173` сыртқы тұрақты host мекенжайын алмастырмайды.
+
 Қазіргі тапсырмада пайдаланушы тұрақты сервер жоқ екенін растады. Workflow және Compose дайын; сыртқы сервер provision жасалған жоқ. Орналастыру үшін Ubuntu/Linux сервер, Docker Engine/Compose, Python 3, curl, SSH және оператор қажет. Бастапқы 2 vCPU/4 GiB ресурс — жоспарлық үлгі, жүктеме тестімен расталмаған.
 
 1. Оператор `/srv/adenly-staging/releases`, `/srv/adenly-staging/shared`, `/srv/adenly-staging/backups` каталогтарын deploy пайдаланушысына дайындайды. Docker құқығы host әкімшілігіне тең болуы мүмкін; бұл аккаунт тек осы synthetic стендке арналған болуы тиіс.
