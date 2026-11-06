@@ -58,16 +58,19 @@ jobs:
         working-directory: lang-backend
       - run: node scripts/check-syntax.cjs
         working-directory: lang-backend
-      - name: Start backend and check HTTP API with PostgreSQL
+      - name: API integration tests with 50% line coverage gate
+        run: npm run test:coverage
         working-directory: lang-backend
-        run: |
-          node --require ./scripts/mail-stub.cjs index.js > /tmp/adenly-backend.log 2>&1 &
-          backend_pid=$!
-          trap 'kill "$backend_pid" 2>/dev/null || true' EXIT
-          node scripts/api-smoke.cjs
+      - name: Coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: lang-backend/coverage/
+          if-no-files-found: error
       - name: Backend logs
         if: failure()
-        run: cat /tmp/adenly-backend.log
+        run: cat /tmp/adenly-api-test-server.log
   docker:
     runs-on: ubuntu-latest
     timeout-minutes: 7
