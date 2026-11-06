@@ -30,6 +30,12 @@ Frontend/browser acceptance толық орындалды деп айтылма�
 
 Known SEC-01 test submit тұтастығы backlog-та бөлек ашық; кеңейтілген happy-path тесттер оның барлық теріс/parallel критерийін жаппайды. CI green production safety certification емес.
 
+## Теріс тексеру және оқшау откат дәлелі
+
+[Тестілік PR #16](https://github.com/Arnurzhairbek/Adenly/pull/16) ішінде coverage шегі уақытша 100% болды. [Нақты CI прогон](https://github.com/Arnurzhairbek/Adenly/actions/runs/42171541258) 68,25% өлшеп, backend және `CI required` job-тарын failure аяқтады; secret scan және Docker өтті. PR біріктірілмей жабылды, тест тармағы жойылды. Негізгі PR шегі 50% болып қалды. Бұл CI қызылды дұрыс анықтағанын дәлелдейді; main protection болмағандықтан GitHub merge-ті міндетті бөгейтінін дәлелдемейді.
+
+Сол runner-де isolated staging release→fixture release→rollback рәсімі өтті: **rollback 19 секунд, жалпы drill 49 секунд**, БД sentinel жазбасы сақталды, backup файлдары тексерілді. Fixture image alias-тері бір application image-іне сілтейді: бұл configuration/container/state/volume rollback тесті, нақты production код нұсқасын өзгертіп кері қайтару тәжірибесі емес. Сыртқы host deploy-і және DORA incident ретінде саналмайды. [Құрылымды дәлел](verification.json).
+
 ## Нақты DORA нәтижесі
 
 Deployments API staging тізімі толық оқылды: **0 successful deployment**. Жиілік 0/week; lead time, CFR және recovery N/A. Журнал толықтығы бекітілмеген, сондықтан бос ledger-ден «0% ақау» немесе «0 сағат шынайы жөндеу» шығарылған жоқ. Нақты DORA мәндері CI прогондарының санымен алмастырылмайды. Оқу шкаласы әр метрикаға бөлек берілген; ресми DORA ұйым рейтингі деп көрсетілмейді.

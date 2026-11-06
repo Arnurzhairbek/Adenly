@@ -1,0 +1,50 @@
+{
+  "recorded_at": "2026-11-06T06:03:47.732736+00:00",
+  "scope": "LZ10 implementation evidence; synthetic drills are not DORA deployments",
+  "coverage": {
+    "scope_file": "lang-backend/.c8rc.json",
+    "required_line_percent": 50,
+    "local_line_percent": 68.01,
+    "github_negative_probe_line_percent": 68.25,
+    "base_api_checks": 39,
+    "extended_api_checks": 51,
+    "external_mail_and_groq": "not used"
+  },
+  "negative_control": {
+    "pull_request": "https://github.com/Arnurzhairbek/Adenly/pull/16",
+    "run": "https://github.com/Arnurzhairbek/Adenly/actions/runs/42171541258",
+    "temporary_threshold": 100,
+    "backend": "failure",
+    "CI required": "failure",
+    "secret_scan": "success",
+    "docker_and_rollback_drill": "success",
+    "pr_closed_without_merge": true,
+    "test_branch_deleted": true,
+    "github_merge_block_verified": false,
+    "reason": "Main branch protection could not be applied; see protection-evidence.json"
+  },
+  "isolated_rollback_drill": {
+    "source_run_id": 42171541258,
+    "source_job_id": 127740591944,
+    "synthetic_fixture": true,
+    "same_application_image_aliases": true,
+    "rollback_seconds": 19,
+    "total_seconds": 49,
+    "database_sentinel_preserved": true,
+    "backups_verified": true,
+    "counted_in_dora": false,
+    "limitation": "Configuration/container/state/volume rollback drill; not an external-host production code-version rollback"
+  },
+  "dora_source": {
+    "run_id": 42170851599,
+    "artifact_name": "dora-dashboard",
+    "artifact_id": 13480594261,
+    "source": "GitHub Actions scoped read-only token -> actual Deployments API",
+    "deployments_api_complete": true,
+    "successful_staging_deployments": 0
+  },
+  "open_pr": "https://github.com/Arnurzhairbek/Adenly/pull/15",
+  "external_staging_host_available": false,
+  "main_protection_applied": false,
+  "human_approval_recorded": false
+}
