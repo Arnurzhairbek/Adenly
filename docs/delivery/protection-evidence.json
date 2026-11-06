@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-11-06T05:52:06.422940+00:00",
+  "operation": "PUT main branch protection",
+  "applied": false,
+  "response": {
+    "message": "Resource not accessible by integration",
+    "documentation_url": "https://docs.github.com/rest/branches/branch-protection#update-branch-protection",
+    "status": "403"
+  },
+  "rulesets_blocker": "Private repository requires GitHub Pro or public visibility (GET rulesets returned 403). No billing/visibility change made."
+}

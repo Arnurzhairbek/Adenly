@@ -77,7 +77,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config --quiet
-      - run: docker compose build
+      - run: VITE_API_URL=/api docker compose build
+      - name: Retain image aliases for isolated staging validation
+        run: |
+          docker tag "$(docker compose images -q backend)" "adently-backend:$GITHUB_SHA"
+          docker tag "$(docker compose images -q frontend)" "adently-frontend:$GITHUB_SHA"
       - name: Start Docker stack and verify readiness
         run: |
           docker compose up -d --wait --wait-timeout 180
@@ -90,6 +94,8 @@ jobs:
       - name: Stop Docker stack
         if: always()
         run: docker compose down --volumes
+      - name: Isolated staging release and rollback drill
+        run: bash scripts/validate-staging.sh "$GITHUB_SHA"
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
