@@ -1,0 +1,51 @@
+{
+  "environment": "staging",
+  "window_start": "2026-10-09T05:51:27.671341+00:00",
+  "window_end": "2026-11-06T05:51:27.671341+00:00",
+  "window_days": 28.0,
+  "metrics": {
+    "deployment_frequency": {
+      "value": 0.0,
+      "unit": "deployments/week",
+      "samples": 0,
+      "reason": null,
+      "level": "Төмен"
+    },
+    "lead_time": {
+      "value": null,
+      "unit": "hours (median)",
+      "samples": 0,
+      "reason": "Head commit → first deployment success; unavailable when no deployment or missing commit evidence",
+      "level": "Бағаланбайды"
+    },
+    "change_failure_rate": {
+      "value": null,
+      "unit": "percent",
+      "samples": 0,
+      "reason": "Only changes with a full 24h observation window; requires attested incident ledger",
+      "level": "Бағаланбайды"
+    },
+    "recovery_time": {
+      "value": null,
+      "unit": "hours (median)",
+      "samples": 0,
+      "reason": "Only real resolved incidents; no incidents means N/A, not zero",
+      "level": "Бағаланбайды"
+    }
+  },
+  "successful_deployments": 0,
+  "mature_changes": 0,
+  "failed_changes": 0,
+  "resolved_incidents": 0,
+  "open_incidents": 0,
+  "deployments_complete": true,
+  "incident_ledger_attested": false,
+  "repair_person_hours": null,
+  "recorded_repair_person_hours": 0,
+  "missing_commit_evidence": [],
+  "lead_time_scope": "deployed head commit; not every commit in a release",
+  "levels": "Local educational thresholds; see docs/delivery/definitions.md",
+  "collected_at": "2026-11-06T05:51:29.316113+00:00",
+  "repository": "Arnurzhairbek/Adenly",
+  "errors": []
+}

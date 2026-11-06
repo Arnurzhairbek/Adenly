@@ -1,0 +1,8 @@
+{
+  "all": true,
+  "include": ["index.js", "routes/**/*.js", "controllers/**/*.js", "middleware/**/*.js", "db/**/*.js", "utils/**/*.js", "config/**/*.js", "models/**/*.js"],
+  "exclude": ["**/*.tmp.js"],
+  "reporter": ["text", "json-summary", "lcov"],
+  "check-coverage": true,
+  "lines": 50
+}
