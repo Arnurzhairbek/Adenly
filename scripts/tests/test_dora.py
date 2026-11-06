@@ -33,6 +33,13 @@ class DoraTests(unittest.TestCase):
         d=dict(self.deps[0],successful_at='2026-10-28T23:00:00Z')
         r=self.calc([d],ledger_complete=True)
         self.assertEqual(r['mature_changes'],0);self.assertIsNone(r['metrics']['change_failure_rate']['value'])
+    def test_failed_live_rollout_needing_rollback_counts_in_cfr_not_frequency(self):
+        d=dict(self.deps[0],successful_at=None,started_at='2026-10-02T02:00:00Z')
+        incidents=incidents_from([dict(incident_id='T1',environment='staging',deployment_id='1',started_at='2026-10-02T03:00:00Z',restored_at='2026-10-02T04:00:00Z',repair_person_hours='1',remediation='rollback')])
+        r=self.calc([d],incidents,ledger_complete=True)
+        self.assertEqual(r['metrics']['deployment_frequency']['value'],0)
+        self.assertEqual(r['metrics']['change_failure_rate']['value'],100)
+        self.assertIsNone(self.calc([d],ledger_complete=True)['metrics']['change_failure_rate']['value'])
     def test_rollback_not_counted_as_new_release(self):
         r=self.calc([dict(self.deps[0],operation='rollback')])
         self.assertEqual(r['successful_deployments'],0)

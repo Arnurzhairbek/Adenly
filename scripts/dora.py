@@ -56,14 +56,21 @@ def compute(deployments,incidents,start,end,environment,deployments_complete=Tru
     # Each input row represents the FIRST success of one deployment ID; retries never multiply it.
     ids=[str(d['id']) for d in deployments]
     if len(ids)!=len(set(ids)):raise ValueError('Duplicate deployment IDs')
-    selected=[d for d in deployments if d['environment']==environment and d.get('operation','release')!='rollback' and start<=stamp(d['successful_at'])<end]
+    releases=[d for d in deployments if d['environment']==environment and d.get('operation','release')!='rollback']
+    selected=[d for d in releases if d.get('successful_at') and start<=stamp(d['successful_at'])<end]
     relevant=[i for i in incidents if i['environment']==environment and start<=i['start']<end]
-    mature=[d for d in selected if stamp(d['successful_at'])+timedelta(hours=24)<=end]
+    # A rollout that damaged the live service and needed rollback belongs in CFR
+    # even if smoke failed before a success status could be posted. A failed build
+    # or failed SSH connection with no recorded service impact is not such a change.
+    incident_ids={str(i['deployment_id']) for i in incidents if i['environment']==environment}
+    failed_live=[d for d in releases if not d.get('successful_at') and str(d['id']) in incident_ids and d.get('started_at') and start<=stamp(d['started_at'])<end]
+    eligible=selected+failed_live
+    mature=[d for d in eligible if stamp(d.get('successful_at') or d['started_at'])+timedelta(hours=24)<=end]
     byid={str(d['id']):d for d in mature};failed=set()
     for i in incidents:
         d=byid.get(str(i['deployment_id']))
         if not d or i['environment']!=environment or i['start']>=end:continue
-        deployed=stamp(d['successful_at'])
+        deployed=stamp(d.get('successful_at') or d['started_at'])
         if i['start']<deployed:raise ValueError('Incident starts before linked deployment')
         if i['remediation']=='rollback' or i['start']<=deployed+timedelta(hours=24):failed.add(str(d['id']))
     leads=[];missing=[]
@@ -106,12 +113,14 @@ def collect(api,environment):
             statuses=api.pages(f'deployments/{d["id"]}/statuses')
             successes=[s for s in statuses if s['state']=='success']
             raw.append({'deployment':{k:d.get(k) for k in ['id','sha','ref','environment','task','created_at']},'statuses':[{k:s.get(k) for k in ['state','created_at','updated_at','log_url']} for s in statuses]})
-            if not successes:continue
-            first=min(successes,key=lambda s:stamp(s['created_at']))
-            row=dict(id=d['id'],sha=d['sha'],environment=d['environment'],successful_at=first['created_at'],
+            first=min(successes,key=lambda s:stamp(s['created_at'])) if successes else None
+            begun=[s for s in statuses if s['state']=='in_progress']
+            started=min((s['created_at'] for s in begun),default=d.get('created_at'),key=stamp) if begun else d.get('created_at')
+            row=dict(id=d['id'],sha=d['sha'],environment=d['environment'],successful_at=first['created_at'] if first else None,started_at=started,
                      operation=(d.get('payload') or {}).get('operation','release') if isinstance(d.get('payload'),dict) else 'release',committed_at=None)
-            try:row['committed_at']=api.get('commits/'+d['sha'])['commit']['committer']['date']
-            except (urllib.error.HTTPError,urllib.error.URLError) as exc:errors.append({'operation':'commit lookup','deployment_id':d['id'],'error':str(exc)})
+            if first:
+                try:row['committed_at']=api.get('commits/'+d['sha'])['commit']['committer']['date']
+                except (urllib.error.HTTPError,urllib.error.URLError) as exc:errors.append({'operation':'commit lookup','deployment_id':d['id'],'error':str(exc)})
             deployments.append(row)
     except (urllib.error.HTTPError,urllib.error.URLError) as exc:
         complete=False;errors.append({'operation':'deployments/statuses read','error':str(exc)})

@@ -14,7 +14,7 @@ Rollback жазбасы `payload.operation=rollback` арқылы ажыраты
 |---|---|---|
 | Deployment frequency | Терезедегі сәтті release deployment саны / (терезе күні / 7) | GitHub Deployments + statuses, environment=staging |
 | Lead time for changes | Deployment head commit-інің committer уақытынан сол deployment алғашқы success-іне дейінгі сағаттардың медианасы | GitHub commit API және deployment success; бұл релиздегі әр коммиттің толық таралымы емес |
-| Change failure rate | Сәтсіз өзгеріске байланыстырылған unique deployment ID / 24 сағаттық бақылауы толық release саны ×100% | Deployments және расталған инцидент журналы |
+| Change failure rate | Сәтсіз өзгеріске байланыстырылған unique deployment ID / 24 сағаттық бақылауы толық eligible change саны ×100% | Deployments және расталған инцидент журналы |
 | Failed deployment recovery time | Инцидент басталуынан қалпына келтіру расталғанға дейінгі сағаттардың медианасы | Қолмен жүргізілетін инцидент журналы; unresolved саны бөлек |
 
 Терезе: әдепкіде соңғы 28 тәулік, `[start,end)`, барлық уақыт ISO 8601 UTC не нақты offset-пен. Дашборд жиналған уақыт пен нақты шекараны көрсетеді. Нөлдік deployment кезінде жиілік 0, lead/CFR/recovery — N/A. API 403 немесе толық емес pagination кезінде жиіліктің өзі де N/A; бұл нөл емес.
@@ -22,6 +22,8 @@ Rollback жазбасы `payload.operation=rollback` арқылы ажыраты
 **Сәтсіз өзгеріс:** release-тен кейін 24 сағат ішінде соған байланысты hotfix керек болды немесе сол release-ке байланысты rollback жасалды. Түзету/rollback байланысын адам incident ledger-де растайды. Бір өзгеріске екі incident болса CFR numerator-ында бір рет саналады. Соңғы 24 сағаттағы жаңа релиздер толық бақылау жоқ болғандықтан CFR denominator-ына кірмейді.
 
 `incidents.csv` — шынайы инциденттер ғана. `incident_observation.csv` — журналдың қандай терезе үшін толық екенін QA растайтын жол. Журнал бос және мұндай бекіту жоқ болса «ақау болған жоқ» деп болжай алмаймыз. Recovery үшін инцидент жоқ болса N/A; API run duration немесе CI түзету уақыты MTTR орнына қолданылмайды. Restore жаттығулары инцидент метрикасына қосылмайды.
+
+CFR eligible change-ке сәтті release және success status-ына жетпей қызметке әсер етіп, incident журналымен расталған failed rollout кіреді. Соңғысы үшін in_progress басталуы алынады; оқиға/уақыт адаммен расталады. Сәтсіз SSH/build пен қызметке әсері жоқ әрекет CFR-ге қосылмайды. Failed rollout DF/lead-ке сәтті release ретінде кірмейді.
 
 ## Бағалау шкаласы
 
