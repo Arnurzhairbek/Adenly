@@ -25,3 +25,8 @@ Adenly IT Project - Team Project
 
 
 [Нақты GitHub Issues экспорты — CSV/JSON және Projects қолжетімділігі](docs/lz9/data/live/README.md).
+
+
+## ЛЗ 10 — CI/CD және DORA
+
+[Пайплайн, coverage, нақты DORA дашборды, релиз/откат чек-листтері және қалған сыртқы шарттар](docs/delivery/README.md).
