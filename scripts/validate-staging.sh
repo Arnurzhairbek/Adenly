@@ -7,13 +7,8 @@ fixture=ffffffffffffffffffffffffffffffffffffffff
 [[ "$sha" != "$fixture" ]]
 sandbox_dir=$(mktemp -d)
 export STAGING_PROJECT="adenly-ci-validation-${RANDOM}"
-mkdir -p "$sandbox_dir/shared"
-umask 077
-{
-  printf 'DB_USER=postgres\nDB_NAME=staging_validation\nSTAGING_HTTP_PORT=18080\n'
-  printf 'DB_PASS=%s\n' "$(openssl rand -hex 24)"
-  printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 48)"
-} > "$sandbox_dir/shared/staging.env"
+python3 scripts/staging_init.py --root "$sandbox_dir" --port 18080
+python3 scripts/staging_preflight.py "$sandbox_dir"
 for target in "$sha" "$fixture"; do
   mkdir -p "$sandbox_dir/releases/$target/scripts"
   cp -R ops "$sandbox_dir/releases/$target/ops"
@@ -30,13 +25,13 @@ docker tag "adently-frontend:$sha" "adently-frontend:$fixture"
 started=$(date +%s)
 bash scripts/staging-release.sh release "$sha" "$sandbox_dir"
 compose=(docker compose -p "$STAGING_PROJECT" --env-file "$sandbox_dir/shared/staging.env" -f "$sandbox_dir/releases/$sha/ops/staging.compose.yml")
-"${compose[@]}" exec -T postgres psql -U postgres -d staging_validation -c "INSERT INTO courses(title) VALUES ('CI rollback sentinel');" >/dev/null
+"${compose[@]}" exec -T postgres psql -U adenly -d adenly_staging -c "INSERT INTO courses(title) VALUES ('CI rollback sentinel');" >/dev/null
 bash scripts/staging-release.sh release "$fixture" "$sandbox_dir"
 [[ $(cat "$sandbox_dir/current") == "$fixture" ]]
 rollback_started=$(date +%s)
 bash scripts/staging-release.sh rollback "$sha" "$sandbox_dir"
 [[ $(cat "$sandbox_dir/current") == "$sha" ]]
-rows=$("${compose[@]}" exec -T postgres psql -U postgres -d staging_validation -Atqc "SELECT count(*) FROM courses WHERE title='CI rollback sentinel';")
+rows=$("${compose[@]}" exec -T postgres psql -U adenly -d adenly_staging -Atqc "SELECT count(*) FROM courses WHERE title='CI rollback sentinel';")
 [[ "$rows" == 1 ]]
 find "$sandbox_dir/backups" -name '*.sql' -type f | python3 -c 'import sys; assert len(sys.stdin.read().splitlines()) >= 2'
 printf 'STAGING_DRILL_OK rollback_seconds=%s total_seconds=%s database_sentinel_preserved=true\n' "$(( $(date +%s)-rollback_started ))" "$(( $(date +%s)-started ))"

@@ -1,6 +1,8 @@
 # Adenly — ЛЗ 10: CI/CD және DORA
 
-**06.11.2026 · Қазақша · Жұмыс тармағы: `feature/lz10-ci-dora`**
+**06.11.2026 · Қазақша · PR #15 main-ға біріктірілген**
+
+Қазіргі CI және скриншоттағы ескі қызыл белгілердің түсіндірмесі: [CI күйі](ci-status.md). Нақты серверді дайындау: [host runbook](host-runbook.md). Қабылдау сценарийлері және жауаптылар: [acceptance](acceptance.md).
 
 ## Дайын нәтижелер
 
@@ -44,7 +46,7 @@ Deployments API staging тізімі толық оқылды: **0 successful dep
 
 1. **Тұрақты сервер жоқ.** SSH/TLS/operator/credentials қажет; оларды ойдан жасау немесе бар сияқты көрсетуге болмайды. `STAGING_ENABLED=true` тек дайындық пен review-ден кейін орнатылады. Оқшау CI release/rollback drill нақты server deployment тарихына қосылмайды.
 2. **Main protection іске қосылмады.** Репозиторий private; Rulesets API Pro/public prerequisite қайтарды, branch-protection PUT integration 403 алды. Required PR/бір review/CI қағидасы жазылғанымен, GitHub-та enforce етілгені және қызыл PR merge-ті бөгейтіні расталған жоқ. Репозиторийді жариялау/тарифті ауыстыру осы жұмыста жасалмады.
-3. **Адам review-і қажет.** [PR #15](https://github.com/Arnurzhairbek/Adenly/pull/15) басқа қатысушы қарап, мақұлдағаннан кейін ғана біріктіріледі; агент өз approval-ын қоспайды.
+3. **Релиз алдында командалық review қажет.** [PR #15](https://github.com/Arnurzhairbek/Adenly/pull/15) репозиторий иесінің тікелей нұсқауымен main-ға біріктірілді; main CI 8/8 success. GitHub review/protection enforcement қосылған деп есептелмейді.
 
 ## Қайта тексеру
 
