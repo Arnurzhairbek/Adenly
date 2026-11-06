@@ -1,0 +1,60 @@
+{
+  "environment": "simulation-staging",
+  "window_start": "2026-10-09T00:00:00+00:00",
+  "window_end": "2026-11-06T00:00:00+00:00",
+  "window_days": 28.0,
+  "metrics": {
+    "deployment_frequency": {
+      "value": 3.0,
+      "unit": "deployments/week",
+      "samples": 12,
+      "reason": null,
+      "level": "Орта"
+    },
+    "lead_time": {
+      "value": 4.0,
+      "unit": "hours (median)",
+      "samples": 12,
+      "reason": "Head commit → first deployment success; unavailable when no deployment or missing commit evidence",
+      "level": "Жоғары"
+    },
+    "change_failure_rate": {
+      "value": 16.666666666666664,
+      "unit": "percent",
+      "samples": 12,
+      "reason": "Only changes with a full 24h observation window; requires attested incident ledger",
+      "level": "Орта"
+    },
+    "recovery_time": {
+      "value": 0.5,
+      "unit": "hours (median)",
+      "samples": 2,
+      "reason": "Only real resolved incidents; no incidents means N/A, not zero",
+      "level": "Жоғары"
+    }
+  },
+  "successful_deployments": 12,
+  "mature_changes": 12,
+  "failed_changes": 2,
+  "resolved_incidents": 2,
+  "open_incidents": 0,
+  "deployments_complete": true,
+  "incident_ledger_attested": true,
+  "repair_person_hours": 3.5,
+  "recorded_repair_person_hours": 3.5,
+  "missing_commit_evidence": [],
+  "lead_time_scope": "deployed head commit; not every commit in a release",
+  "levels": "Local educational thresholds; see docs/delivery/definitions.md",
+  "data_mode": "simulation",
+  "source_kind": "fabricated_for_education",
+  "is_real_project_measurement": false,
+  "repository": "Arnurzhairbek/Adenly",
+  "collected_at": "2026-11-06T08:50:47.114464+00:00",
+  "errors": [],
+  "assumptions": [
+    "All timestamps, release IDs and incidents are fictional.",
+    "The synthetic ledger is complete by construction; no real QA attestation.",
+    "All 12 feature releases have a full 24-hour observation window.",
+    "The separate rollback is excluded from deployment frequency and lead time."
+  ]
+}

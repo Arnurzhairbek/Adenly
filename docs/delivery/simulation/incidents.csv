@@ -1,0 +1,3 @@
+incident_id,environment,deployment_id,started_at,restored_at,repair_person_hours,remediation,recorded_by,evidence_url
+SIM-INC-01,simulation-staging,SIM-03,2026-10-16T10:10:00Z,2026-10-16T10:50:00Z,1.5,hotfix,Оқу симуляциясы,SIMULATION-NO-REAL-INCIDENT
+SIM-INC-02,simulation-staging,SIM-09,2026-10-30T10:15:00Z,2026-10-30T10:35:00Z,2.0,rollback,Оқу симуляциясы,SIMULATION-NO-REAL-INCIDENT

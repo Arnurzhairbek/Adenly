@@ -3,11 +3,13 @@ Adenly IT Project - Team Project
 
 ## DORA дашборды
 
-[**Дашбордты браузерде ашу →**](docs/delivery/report/README.md)
+[**Сандармен толтырылған оқу дашбордын ашу →**](docs/delivery/simulation/README.md)
 
-![Adenly DORA — нақты GitHub деректері](docs/delivery/report/dora_dashboard.png)
+**ОЙДАН ҚҰРАСТЫРЫЛҒАН ОҚУ ДЕРЕКТЕРІ:** 3 release/апта · lead time 4 сағат · CFR 16,67% · recovery 30 минут. Бұл нақты GitHub нәтижесі емес.
 
-Төрт метрика, апталық release графигі және дерек сапасы. Сурет — көрсетілген уақыттағы snapshot. Жаңа өлшем үшін [DORA dashboard](https://github.com/Arnurzhairbek/Adenly/actions/workflows/dora.yml) → **Run workflow → main**; нәтиже прогонның **Summary** бөлімінде көрінеді. Репозиторий бетіндегі snapshot өздігінен жаңармайды.
+![Adenly DORA DEMO — оқу симуляциясы](docs/delivery/simulation/dora_dashboard.png)
+
+[Нақты GitHub деректері бойынша бөлек есеп](docs/delivery/report/README.md). Жаңа нақты өлшем үшін [DORA dashboard](https://github.com/Arnurzhairbek/Adenly/actions/workflows/dora.yml) → **Run workflow → main**; нәтиже прогонның **Summary** бөлімінде көрінеді. Симуляцияны қайта есептеу: `python scripts/dora_simulation.py`.
 
 ## Базалық апталық жоспар
 
