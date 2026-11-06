@@ -1,15 +1,19 @@
-name: Adenly CI
+name: CI
 on:
   push:
-    branches: [main, feature/import-adenly-source]
+    branches: [main, feature/lz10-ci-dora]
   pull_request:
     branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,6 +27,7 @@ jobs:
         working-directory: lang-frontend
   backend:
     runs-on: ubuntu-latest
+    timeout-minutes: 7
     services:
       postgres:
         image: postgres:16-alpine
@@ -65,6 +70,7 @@ jobs:
         run: cat /tmp/adenly-backend.log
   docker:
     runs-on: ubuntu-latest
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config --quiet
@@ -81,3 +87,19 @@ jobs:
       - name: Stop Docker stack
         if: always()
         run: docker compose down --volumes
+  ci-required:
+    name: CI required
+    if: always()
+    needs: [frontend, backend, docker]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Require every check to pass
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python - <<'PY'
+          import json, os
+          results = json.loads(os.environ['RESULTS'])
+          assert all(job['result'] == 'success' for job in results.values()), results
+          PY
