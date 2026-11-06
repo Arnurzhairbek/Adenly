@@ -2,6 +2,8 @@
 
 **06.11.2026 · Қазақша · PR #15 main-ға біріктірілген**
 
+[**DORA дашбордын браузерде ашу →**](report/README.md) · [Жаңа есепті іске қосу](https://github.com/Arnurzhairbek/Adenly/actions/workflows/dora.yml). Workflow Summary ішінде төрт метрика кестесі көрсетіледі; артефактта PNG және бастапқы JSON деректері бар.
+
 Қазіргі CI және скриншоттағы ескі қызыл белгілердің түсіндірмесі: [CI күйі](ci-status.md). Нақты серверді дайындау: [host runbook](host-runbook.md). Қабылдау сценарийлері және жауаптылар: [acceptance](acceptance.md).
 
 ## Дайын нәтижелер

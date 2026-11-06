@@ -34,7 +34,7 @@ jobs:
       - name: Collect actual deployments and incident ledger
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python scripts/dora.py --output artifacts/dora
+        run: python scripts/dora.py --output artifacts/dora --summary "$GITHUB_STEP_SUMMARY"
       - name: Check collection completeness
         run: |
           python - <<'PY'

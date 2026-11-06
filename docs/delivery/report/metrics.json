@@ -1,7 +1,7 @@
 {
   "environment": "staging",
-  "window_start": "2026-10-09T05:51:27.671341+00:00",
-  "window_end": "2026-11-06T05:51:27.671341+00:00",
+  "window_start": "2026-10-09T08:35:37.835009+00:00",
+  "window_end": "2026-11-06T08:35:37.835009+00:00",
   "window_days": 28.0,
   "metrics": {
     "deployment_frequency": {
@@ -45,7 +45,8 @@
   "missing_commit_evidence": [],
   "lead_time_scope": "deployed head commit; not every commit in a release",
   "levels": "Local educational thresholds; see docs/delivery/definitions.md",
-  "collected_at": "2026-11-06T05:51:29.316113+00:00",
+  "collected_at": "2026-11-06T08:35:39.910737+00:00",
   "repository": "Arnurzhairbek/Adenly",
-  "errors": []
+  "errors": [],
+  "source_run_url": "https://github.com/Arnurzhairbek/Adenly/actions/runs/42188755191"
 }
