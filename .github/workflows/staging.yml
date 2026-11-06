@@ -1,0 +1,104 @@
+name: Staging delivery
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        options: [release, rollback]
+        default: release
+      target_sha:
+        description: 'Rollback: full known-good SHA retained on the host'
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: staging-delivery
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: >-
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository) ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
+      actions: read
+    steps:
+      - name: Require a configured real staging host
+        env:
+          HOST: ${{ secrets.STAGING_HOST }}
+          LOGIN: ${{ secrets.STAGING_USER }}
+          KEY: ${{ secrets.STAGING_SSH_KEY }}
+          KNOWN: ${{ secrets.STAGING_KNOWN_HOSTS }}
+        run: |
+          test -n "$HOST" && test -n "$LOGIN" && test -n "$KEY" && test -n "$KNOWN" || { echo 'Staging host is not configured; no deployment will be recorded.'; exit 1; }
+      - name: Select verified revision
+        id: revision
+        env:
+          EVENT_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_SHA: ${{ github.sha }}
+          KIND: ${{ inputs.operation || 'release' }}
+          TARGET: ${{ inputs.target_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          candidate="${EVENT_SHA:-$HEAD_SHA}"
+          if [ "$KIND" = rollback ]; then candidate="$TARGET"; fi
+          [[ "$candidate" =~ ^[0-9a-f]{40}$ ]]
+          # Manual release is allowed only after the same SHA has a successful CI on main.
+          if [ "$KIND" = release ]; then
+            gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$candidate&branch=main&status=success" --jq '.workflow_runs | length' | python3 -c 'import sys; assert int(sys.stdin.read()) > 0'
+          fi
+          echo "sha=$candidate" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.revision.outputs.sha }}
+          persist-credentials: false
+      - name: Set up verified SSH host identity
+        env:
+          KEY: ${{ secrets.STAGING_SSH_KEY }}
+          KNOWN: ${{ secrets.STAGING_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+      - name: Create deployment record
+        id: record
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id=$(python3 scripts/deployment_record.py create --sha '${{ steps.revision.outputs.sha }}' --kind '${{ inputs.operation || 'release' }}')
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+          python3 scripts/deployment_record.py status --id "$id" --state in_progress
+      - name: Deploy or rollback and verify the real host
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+          SHA: ${{ steps.revision.outputs.sha }}
+          KIND: ${{ inputs.operation || 'release' }}
+        run: |
+          [[ "$STAGING_HOST" =~ ^[a-zA-Z0-9.-]+$ && "$STAGING_USER" =~ ^[a-zA-Z0-9_-]+$ ]]
+          dest="$STAGING_USER@$STAGING_HOST"
+          ssh_args=(-o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=yes)
+          if [ "$KIND" = release ]; then
+            git archive HEAD lang-backend lang-frontend ops scripts/staging-release.sh | ssh "${ssh_args[@]}" "$dest" "mkdir -p /srv/adenly-staging/releases/$SHA && tar -xf - -C /srv/adenly-staging/releases/$SHA"
+          fi
+          ssh "${ssh_args[@]}" "$dest" "bash /srv/adenly-staging/releases/$SHA/scripts/staging-release.sh $KIND $SHA /srv/adenly-staging"
+      - name: Record actual outcome
+        if: always() && steps.record.outputs.id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ job.status }}
+        run: |
+          state=failure
+          if [ "$OUTCOME" = success ]; then state=success; fi
+          python3 scripts/deployment_record.py status --id '${{ steps.record.outputs.id }}' --state "$state"
+      - name: Remove runner SSH material
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519 ~/.ssh/known_hosts

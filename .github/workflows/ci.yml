@@ -90,10 +90,58 @@ jobs:
       - name: Stop Docker stack
         if: always()
         run: docker compose down --volumes
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+  delivery-tests:
+    name: DORA calculation tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s scripts/tests -v
+      - run: bash -n scripts/staging-release.sh
+  dora-snapshot:
+    name: Real DORA snapshot
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+      deployments: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scripts/requirements-dora.txt
+      - run: pip install -r scripts/requirements-dora.txt
+      - name: Collect actual deployments and incident ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/dora.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dora-dashboard
+          path: docs/delivery/report/
+          if-no-files-found: error
   ci-required:
     name: CI required
     if: always()
-    needs: [frontend, backend, docker]
+    needs: [frontend, backend, docker, secrets, delivery-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
