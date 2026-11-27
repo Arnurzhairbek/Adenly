@@ -1,0 +1,70 @@
+{
+  "repository": "Arnurzhairbek/Adenly",
+  "start_utc": "2026-11-06T00:00:00+00:00",
+  "end_exclusive_utc": "2026-11-13T00:00:00+00:00",
+  "collected_at_utc": "2026-11-27T07:59:18.586109+00:00",
+  "metrics": {
+    "created_issues": 0,
+    "closed_issues": 0,
+    "open_at_end": 11,
+    "in_progress_at_end": null,
+    "blocked_at_end": null,
+    "deployment_records": 0,
+    "successful_deployments": 0,
+    "default_branch_commits": 20
+  },
+  "evidence": {
+    "created_issues": [],
+    "closed_issues": [],
+    "open_at_end": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14
+    ],
+    "in_progress_at_end": null,
+    "blocked_at_end": null,
+    "deployment_records": [],
+    "successful_deployments": [],
+    "default_branch_commits": [
+      "27c88333f70a2d2cb2ac07b6ac039a1218329850",
+      "53ed526251a83ff4c4d927036b9b0809c6fe469e",
+      "36482abb740b446ec4917e01668fc8a966b0efc0",
+      "26e81c4d647c053beb6d5abe81e1ff1c8c0ab565",
+      "12f34a655b74d983b620b138e97abca721cd3184",
+      "38dd687eb11e2440a3f286265fa22b4810ca8b4a",
+      "d18ad6c12887c1373e240a1aa54ab17c21dc2011",
+      "fe4c723face942856df9e5e1027b75d0318a5015",
+      "15d93d6d1f69d9178544da03c03efaecaf5c1e70",
+      "3d0e73b31f326a4dd1d6625f6cb2d6985bb38f0c",
+      "dc30dcbb097e89f8ec568fbde75e53d07305a122",
+      "1fc8590ca7790d6d84b0999836609e9def33b0c9",
+      "2e73afaa074a5e90e03ff7a5e0ea1e0978ed841b",
+      "d6c39d9fbd9d35d3d67c3dbea133ad4022f62819",
+      "4cfae86a16b70ae158ac9c76676b9c5e245c8f51",
+      "6808e96efb98380f4ca4cb060c589aec01aebb03",
+      "9f71836ed5c0e6150523f63c2e9b5a7ad8d4501d",
+      "3f7c6596d9c9f88c4eebc15c9d2a3221a61516af",
+      "e59fbee6dc1e3a50a9d4a02af0b96017cce70c06",
+      "e74e88c5f8f85d8312107cd3aa0b699c8c9d5e1d"
+    ]
+  },
+  "label_mapping": {
+    "in_progress": [],
+    "blocked": []
+  },
+  "limitations": [
+    "Open state and labels reconstructed from current issue records and later issue events; deleted issues, renamed labels and external Projects statuses may be missing.",
+    "Closed issues are distinct issue IDs with a closure event during the period, even if reopened.",
+    "Deployments are GitHub deployment records created during the period; successful means a success status before the end; zero records does not exclude external deployment.",
+    "Commits are from current default branch history, by committer date; not a historical branch snapshot.",
+    "Dates are UTC; interval includes start and excludes end."
+  ]
+}
