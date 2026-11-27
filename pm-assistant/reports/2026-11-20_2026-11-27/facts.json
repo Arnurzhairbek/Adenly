@@ -1,0 +1,49 @@
+{
+  "repository": "Arnurzhairbek/Adenly",
+  "start_utc": "2026-11-20T00:00:00+00:00",
+  "end_exclusive_utc": "2026-11-27T00:00:00+00:00",
+  "collected_at_utc": "2026-11-27T07:59:00.290450+00:00",
+  "metrics": {
+    "created_issues": 0,
+    "closed_issues": 0,
+    "open_at_end": 11,
+    "in_progress_at_end": null,
+    "blocked_at_end": null,
+    "deployment_records": 0,
+    "successful_deployments": 0,
+    "default_branch_commits": 0
+  },
+  "evidence": {
+    "created_issues": [],
+    "closed_issues": [],
+    "open_at_end": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14
+    ],
+    "in_progress_at_end": null,
+    "blocked_at_end": null,
+    "deployment_records": [],
+    "successful_deployments": [],
+    "default_branch_commits": []
+  },
+  "label_mapping": {
+    "in_progress": [],
+    "blocked": []
+  },
+  "limitations": [
+    "Open state and labels reconstructed from current issue records and later issue events; deleted issues, renamed labels and external Projects statuses may be missing.",
+    "Closed issues are distinct issue IDs with a closure event during the period, even if reopened.",
+    "Deployments are GitHub deployment records created during the period; successful means a success status before the end; zero records does not exclude external deployment.",
+    "Commits are from current default branch history, by committer date; not a historical branch snapshot.",
+    "Dates are UTC; interval includes start and excludes end."
+  ]
+}
