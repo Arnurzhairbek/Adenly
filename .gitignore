@@ -59,3 +59,6 @@ coverage/
 # Misc
 *.pem
 *.key
+# Keep potentially sensitive issue contents and raw comparison drafts local.
+project-management-ai/facts/*.json
+project-management-ai/reports/experiments/*/weekly_status_*.md

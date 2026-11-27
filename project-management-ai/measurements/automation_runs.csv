@@ -1,0 +1,3 @@
+run_id,period_start,period_end,generation_minutes,verification_minutes,editing_minutes,prompt_version,reviewer,notes
+2026-11-27T08:23:52Z,2026-11-07T00:00:00Z,2026-11-14T00:00:00Z,0.528,,,v3,,Generation time auto-recorded; reviewer fills verification/editing.
+2026-11-27T08:24:33Z,2026-11-14T00:00:00Z,2026-11-21T00:00:00Z,0.341,,,v3,,Generation time auto-recorded; reviewer fills verification/editing.

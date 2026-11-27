@@ -1,135 +1,224 @@
+#!/usr/bin/env python3
+"""Create a verifiable weekly project status draft from GitHub and Ollama."""
+from __future__ import annotations
+
 import argparse
+import csv
 import json
 import os
+import re
+import sys
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Any
+
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = 'https://api.github.com'
-REPO = os.getenv('GH_REPO', 'Arnurzhairbek/Adenly')
-UTC = timezone.utc
+PROMPTS = ROOT / "project-management-ai" / "prompts"
+REPORTS = ROOT / "project-management-ai" / "reports"
+FACTS = ROOT / "project-management-ai" / "facts"
+RUN_LOG = ROOT / "project-management-ai" / "measurements" / "automation_runs.csv"
+API = os.getenv("GH_API_URL", "https://api.github.com").rstrip("/")
+GH_VERSION = "2022-11-28"
 
-def dt(s):
-    return datetime.fromisoformat(s.replace('Z', '+00:00')) if s else None
 
-def gh(path, params=None):
-    headers = {'Accept': 'application/vnd.github+json'}
-    if os.getenv('GH_TOKEN'):
-        headers['Authorization'] = 'Bearer ' + os.environ['GH_TOKEN']
-    url = BASE + '/repos/' + REPO + path
-    params = dict(params or {}, per_page=100)
-    result = []
-    while url:
-        r = requests.get(url, headers=headers, params=params, timeout=45)
-        r.raise_for_status()
-        data = r.json()
-        if not isinstance(data, list):
-            raise ValueError('Expected list: ' + path)
-        result.extend(data)
-        url = r.links.get('next', {}).get('url')
-        params = None
+class GitHub:
+    def __init__(self, token: str, repo: str, session: requests.Session | None = None):
+        if not re.fullmatch(r"[^/\s]+/[^/\s]+", repo):
+            raise ValueError("GH_REPO must be OWNER/REPOSITORY")
+        self.repo = repo
+        self.session = session or requests.Session()
+        headers = {
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": GH_VERSION,
+        }
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        self.session.headers.update(headers)
+
+    def pages(self, path: str, params: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+        url = f"{API}/repos/{self.repo}/{path.lstrip('/')}"
+        query = {"per_page": 100, **(params or {})}
+        results: list[dict[str, Any]] = []
+        while url:
+            response = self.session.get(url, params=query, timeout=30)
+            response.raise_for_status()
+            payload = response.json()
+            if not isinstance(payload, list):
+                raise RuntimeError(f"Unexpected GitHub response for {path}")
+            results.extend(payload)
+            url = response.links.get("next", {}).get("url")
+            query = None
+        return results
+
+    def get(self, path: str) -> dict[str, Any]:
+        response = self.session.get(f"{API}/repos/{self.repo}/{path.lstrip('/')}", timeout=30)
+        response.raise_for_status()
+        return response.json()
+
+
+def parse_date(value: str) -> datetime:
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed.astimezone(timezone.utc)
+
+
+def iso(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def collect_facts(gh: GitHub, since: datetime, until: datetime) -> dict[str, Any]:
+    start, end = iso(since), iso(until)
+    all_items = gh.pages("issues", {"state": "all", "sort": "created", "direction": "asc"})
+    issues = [i for i in all_items if "pull_request" not in i]
+    # Periods are half-open [since, until), so boundary events belong to one period only.
+    opened_period = [i for i in issues if start <= i.get("created_at", "") < end]
+    closed_period = [i for i in issues if i.get("closed_at") and start <= i["closed_at"] < end]
+    # Reconstruct state just before the exclusive period end from creation/closure timestamps.
+    open_at_end = [i for i in issues if i.get("created_at", "") < end and
+                   (not i.get("closed_at") or i["closed_at"] >= end)]
+
+    def compact(issue: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "number": issue["number"], "title": issue["title"], "url": issue["html_url"],
+            "labels": [label["name"] for label in issue.get("labels", [])],
+            "updated_at": issue.get("updated_at"),
+        }
+
+    in_progress_labels = {v.strip().casefold() for v in os.getenv("IN_PROGRESS_LABELS", "in progress,in-progress,doing").split(",") if v.strip()}
+    blocked_labels = {v.strip().casefold() for v in os.getenv("BLOCKED_LABELS", "blocked,заблокировано").split(",") if v.strip()}
+    in_progress = [i for i in open_at_end if in_progress_labels.intersection({l["name"].casefold() for l in i.get("labels", [])})]
+    blocked = [i for i in open_at_end if blocked_labels.intersection({l["name"].casefold() for l in i.get("labels", [])})]
+
+    deployments_in_period = []
+    for deployment in gh.pages("deployments", {"per_page": 100}):
+        created = deployment.get("created_at", "")
+        if not start <= created <= end:
+            continue
+        statuses = gh.pages(f"deployments/{deployment['id']}/statuses", {"per_page": 1})
+        latest = statuses[0] if statuses else None
+        deployments_in_period.append({
+            "id": deployment["id"], "environment": deployment.get("environment"),
+            "ref": deployment.get("ref"), "created_at": created,
+            "status": latest.get("state") if latest else "no status",
+            "status_at": latest.get("created_at") if latest else None,
+            "url": deployment.get("statuses_url"),
+        })
+
+    return {
+        "repository": gh.repo, "period": {"since": start, "until": end},
+        "facts_collected_at": iso(datetime.now(timezone.utc)),
+        "snapshot_as_of": end,
+        "counts": {
+            "issues_opened": len(opened_period), "issues_closed": len(closed_period),
+            "issues_open_at_period_end": len(open_at_end), "issues_in_progress": len(in_progress),
+            "issues_blocked": len(blocked), "deployments": len(deployments_in_period),
+        },
+        "issues_opened": [compact(i) for i in opened_period],
+        "issues_closed": [compact(i) for i in closed_period],
+        "issues_open_at_period_end": [compact(i) for i in open_at_end],
+        "issues_in_progress": [compact(i) for i in in_progress],
+        "issues_blocked": [compact(i) for i in blocked],
+        "deployments": deployments_in_period,
+        "source_note": "Counts are computed by Python from GitHub REST API responses; the language model does not calculate metrics. Issue open/closed state is reconstructed at the period boundary from created_at/closed_at. Labels are current at collection time because GitHub's issues list does not provide historical label state.",
+    }
+
+
+def build_prompt(facts: dict[str, Any], version: str) -> str:
+    path = PROMPTS / f"{version}.txt"
+    if not path.exists():
+        raise FileNotFoundError(f"Prompt not found: {path}")
+    model_facts = facts
+    if version == "v3":
+        # Keep model input to aggregate metrics only; issue titles are not sent to Ollama.
+        model_facts = {"repository": facts["repository"], "period": facts["period"],
+                       "snapshot_as_of": facts["snapshot_as_of"], "counts": facts["counts"],
+                       "source_note": facts["source_note"]}
+    return path.read_text(encoding="utf-8").replace("{{FACTS_JSON}}", json.dumps(model_facts, ensure_ascii=False, indent=2))
+
+
+def generate(prompt: str) -> str:
+    endpoint = os.getenv("OLLAMA_URL", "http://localhost:11434").rstrip("/") + "/api/generate"
+    model = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
+    response = requests.post(endpoint, json={"model": model, "prompt": prompt, "stream": False,
+                                               "options": {"temperature": 0.2}}, timeout=300)
+    response.raise_for_status()
+    result = response.json().get("response", "").strip()
+    if not result:
+        raise RuntimeError("Ollama returned an empty report")
     return result
 
-def collect(start, end):
-    issues = [i for i in gh('/issues', {'state':'all'}) if 'pull_request' not in i]
-    labels = {l['name'].lower() for l in gh('/labels')}
-    progress = labels & {'in progress','in-progress','status: in progress','wip','doing'}
-    blocked = labels & {'blocked','status: blocked'}
-    created, closed, opened, wip, blocks = [], [], [], [], []
-    for i in issues:
-        if dt(i['created_at']) >= end:
-            continue
-        n = i['number']
-        events = sorted(gh(f'/issues/{n}/events'), key=lambda e:(e['created_at'], e.get('id',0)))
-        state = i['state']
-        ilabels = {l['name'].lower() for l in i['labels']}
-        for e in reversed(events):
-            if dt(e['created_at']) < end:
-                break
-            kind = e['event']
-            if kind == 'closed': state = 'open'
-            if kind == 'reopened': state = 'closed'
-            if kind == 'labeled' and e.get('label'): ilabels.discard(e['label']['name'].lower())
-            if kind == 'unlabeled' and e.get('label'): ilabels.add(e['label']['name'].lower())
-        if start <= dt(i['created_at']) < end: created.append(n)
-        if any(e['event']=='closed' and start <= dt(e['created_at']) < end for e in events) or (i.get('closed_at') and start <= dt(i['closed_at']) < end): closed.append(n)
-        if state == 'open':
-            opened.append(n)
-            if ilabels & progress: wip.append(n)
-            if ilabels & blocked: blocks.append(n)
-    deployments = gh('/deployments')
-    period_deployments = [d for d in deployments if start <= dt(d['created_at']) < end]
-    successful = []
-    for d in period_deployments:
-        statuses = gh(f"/deployments/{d['id']}/statuses")
-        if any(s['state']=='success' and dt(s['created_at']) < end for s in statuses): successful.append(d['id'])
-    commits = gh('/commits', {'since':start.isoformat(),'until':end.isoformat()})
-    commits = [c['sha'] for c in commits if start <= dt(c['commit']['committer']['date']) < end]
-    metrics = {
-        'created_issues':len(created), 'closed_issues':len(closed), 'open_at_end':len(opened),
-        'in_progress_at_end':len(wip) if progress else None,
-        'blocked_at_end':len(blocks) if blocked else None,
-        'deployment_records':len(period_deployments), 'successful_deployments':len(successful),
-        'default_branch_commits':len(commits),
-    }
-    evidence = {'created_issues':sorted(created),'closed_issues':sorted(closed),'open_at_end':sorted(opened),
-                'in_progress_at_end':sorted(wip) if progress else None,'blocked_at_end':sorted(blocks) if blocked else None,
-                'deployment_records':[d['id'] for d in period_deployments],'successful_deployments':successful,'default_branch_commits':commits}
-    return {'repository':REPO,'start_utc':start.isoformat(),'end_exclusive_utc':end.isoformat(),
-            'collected_at_utc':datetime.now(UTC).isoformat(),'metrics':metrics,'evidence':evidence,
-            'label_mapping':{'in_progress':sorted(progress),'blocked':sorted(blocked)},
-            'limitations':['Open state and labels reconstructed from current issue records and later issue events; deleted issues, renamed labels and external Projects statuses may be missing.', 'Closed issues are distinct issue IDs with a closure event during the period, even if reopened.', 'Deployments are GitHub deployment records created during the period; successful means a success status before the end; zero records does not exclude external deployment.', 'Commits are from current default branch history, by committer date; not a historical branch snapshot.', 'Dates are UTC; interval includes start and excludes end.']}
 
-NAMES = {'created_issues':'Кезеңде ашылған тапсырмалар','closed_issues':'Кезеңде жабылған тапсырмалар (бірегей)','open_at_end':'Кезең соңында ашық тапсырмалар','in_progress_at_end':'Кезең соңында жұмыста (label бойынша)','blocked_at_end':'Кезең соңында блокталған (label бойынша)','deployment_records':'GitHub deployment жазбалары','successful_deployments':'Кезеңдегі сәтті deployment жазбалары','default_branch_commits':'Негізгі тармақ коммиттері'}
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--since", help="Period start (ISO date/time; defaults to 7 days ago UTC)")
+    parser.add_argument("--until", help="Period end (ISO date/time; defaults to now UTC)")
+    parser.add_argument("--facts-file", type=Path, help="Use a previously collected facts JSON (for prompt comparison/audit)")
+    parser.add_argument("--prompt-version", choices=("v1", "v2", "v3"), default=os.getenv("PROMPT_VERSION", "v3"))
+    parser.add_argument("--output-dir", type=Path, default=REPORTS)
+    parser.add_argument("--facts-dir", type=Path, default=FACTS)
+    parser.add_argument("--facts-only", action="store_true", help="Collect and save real GitHub facts without calling Ollama")
+    parser.add_argument("--no-record-run", action="store_true", help="Do not append timing to automation_runs.csv (for prompt experiments)")
+    args = parser.parse_args()
+    run_started = time.monotonic()
 
-def generate(facts, version, provider):
-    # Only a fixed allowlist of aggregate values is sent, never issue text or credentials.
-    safe = {'period_start':facts['start_utc'],'period_end_exclusive':facts['end_exclusive_utc'], 'metrics':{NAMES[k]:facts['metrics'][k] for k in NAMES}, 'limitations':facts['limitations']}
-    prompt = (ROOT / 'pm-assistant' / 'prompts' / f'{version}.txt').read_text(encoding='utf-8') + '\n' + json.dumps(safe,ensure_ascii=False,indent=2)
-    if provider == 'ollama':
-        model = os.getenv('OLLAMA_MODEL','qwen2.5:3b')
-        r = requests.post('http://localhost:11434/api/generate',json={'model':model,'prompt':prompt,'stream':False,'options':{'temperature':0.2}},timeout=300)
-        r.raise_for_status()
-        return model,r.json()['response']
-    model = os.environ.get('GEMINI_MODEL','').removeprefix('models/')
-    if not model or not os.getenv('GEMINI_API_KEY'):
-        raise ValueError('Set GEMINI_MODEL and GEMINI_API_KEY (see README).')
-    r = requests.post(f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent',headers={'x-goog-api-key':os.environ['GEMINI_API_KEY']},json={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'temperature':0.2}},timeout=120)
-    r.raise_for_status()
-    parts = r.json()['candidates'][0]['content']['parts']
-    return model,'\n'.join(p['text'] for p in parts if 'text' in p and not p.get('thought'))
-
-def main():
-    p = argparse.ArgumentParser()
-    p.add_argument('--start'); p.add_argument('--end'); p.add_argument('--facts',type=Path)
-    p.add_argument('--facts-only',action='store_true'); p.add_argument('--version',choices=['v1','v2'],default='v1')
-    p.add_argument('--provider',choices=['gemini','ollama'],default=os.getenv('AI_PROVIDER','gemini'))
-    args = p.parse_args(); t = time.perf_counter()
-    if args.facts:
-        facts = json.loads(args.facts.read_text(encoding='utf-8'))
+    if args.facts_file:
+        if args.since or args.until:
+            parser.error("Do not combine --facts-file with --since/--until")
+        facts = json.loads(args.facts_file.read_text(encoding="utf-8"))
+        since, until = parse_date(facts["period"]["since"]), parse_date(facts["period"]["until"])
     else:
-        if bool(args.start) != bool(args.end): p.error('Provide both --start and --end')
-        today = datetime.now(UTC).replace(hour=0,minute=0,second=0,microsecond=0)
-        end = dt(args.end+'T00:00:00+00:00') if args.end else today-timedelta(days=(today.weekday()-4)%7)
-        start = dt(args.start+'T00:00:00+00:00') if args.start else end-timedelta(days=7)
-        if not start < end <= datetime.now(UTC): p.error('Invalid or future interval')
-        facts = collect(start,end)
-    out = ROOT/'pm-assistant'/'reports'/f"{facts['start_utc'][:10]}_{facts['end_exclusive_utc'][:10]}"
-    out.mkdir(parents=True,exist_ok=True)
-    (out/'facts.json').write_text(json.dumps(facts,ensure_ascii=False,indent=2),encoding='utf-8')
-    print(json.dumps(facts['metrics'],ensure_ascii=False,indent=2)); print('FACTS:',out/'facts.json')
-    if args.facts_only: return
-    model, draft = generate(facts,args.version,args.provider)
-    if not draft.strip(): raise ValueError('Empty model response')
-    (out/f'raw_{args.version}.txt').write_text(draft,encoding='utf-8')
-    rows = '\n'.join(f"| {NAMES[k]} | {v if v is not None else 'нет данных / деректер жоқ'} |" for k,v in facts['metrics'].items())
-    report = f"# Adenly — апталық статус-есеп (ТЕКСЕРІЛМЕГЕН ЧЕРНОВИК)\n\nКезең UTC: {facts['start_utc']} – {facts['end_exclusive_utc']} (соңы кірмейді).\n\n## Python есептеген көрсеткіштер\n\n| Көрсеткіш | Мән |\n|---|---|\n{rows}\n\n## ИИ дайындаған мәтін\n\n{draft}\n\n## Шектеулер\n\n"+'\n'.join('- '+x for x in facts['limitations'])+f"\n\n## ИИ қолданылғанын ашық көрсету\n\nҚұрал: {args.provider} / {model}. ИИ тек мәтін дайындады, сандар Python арқылы есептелді. Фактілерді тексеруші: [аты-жөні, тексергеннен кейін]. Мәртебесі: тексерілмеген.\n"
-    (out/f'report_{args.version}.md').write_text(report,encoding='utf-8')
-    elapsed = round(time.perf_counter()-t,3)
-    (out/f'timing_{args.version}.json').write_text(json.dumps({'elapsed_seconds':elapsed,'includes_collection':not bool(args.facts),'provider':args.provider,'model':model},indent=2),encoding='utf-8')
-    print('REPORT:',out/f'report_{args.version}.md'); print('Elapsed seconds:',elapsed)
+        token, repo = os.getenv("GH_TOKEN"), os.getenv("GH_REPO")
+        if not repo:
+            parser.error("Set GH_REPO=OWNER/REPOSITORY; GH_TOKEN is optional for public repositories")
+        until = parse_date(args.until) if args.until else datetime.now(timezone.utc)
+        since = parse_date(args.since) if args.since else until - timedelta(days=7)
+        if since >= until:
+            parser.error("--since must be earlier than --until")
+        facts = collect_facts(GitHub(token, repo), since, until)
+    args.facts_dir.mkdir(parents=True, exist_ok=True)
+    stamp = since.strftime("%Y%m%d") + "_" + until.strftime("%Y%m%d")
+    facts_path = args.facts_dir / f"facts_{stamp}.json"
+    facts_path.write_text(json.dumps(facts, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if args.facts_only:
+        print(f"Facts: {facts_path}")
+        print(json.dumps(facts["counts"], ensure_ascii=False))
+        return 0
+    report = generate(build_prompt(facts, args.prompt_version))
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    report_path = args.output_dir / f"weekly_status_{stamp}.md"
+    disclosure = (f"\n\n---\n\n**Раскрытие использования ИИ:** черновик сформирован {os.getenv('OLLAMA_MODEL', 'qwen2.5:3b')} "
+                  f"через Ollama по данным GitHub за {facts['period']['since']} — {facts['period']['until']}. "
+                  "Факты должен проверить ответственный менеджер проекта: ____________________. "
+                  "До этой проверки документ не является утверждённым отчётом.\n")
+    period_header = (f"# Еженедельный статус проекта\n\n"
+                     f"**Период (UTC):** [{facts['period']['since']}, {facts['period']['until']})\n\n")
+    report_path.write_text(f"{period_header}{report}{disclosure}", encoding="utf-8")
+    generation_minutes = (time.monotonic() - run_started) / 60
+    if not args.no_record_run:
+        RUN_LOG.parent.mkdir(parents=True, exist_ok=True)
+        with RUN_LOG.open("a", encoding="utf-8", newline="") as log:
+            writer = csv.DictWriter(log, fieldnames=["run_id", "period_start", "period_end", "generation_minutes",
+                                                     "verification_minutes", "editing_minutes", "prompt_version",
+                                                     "reviewer", "notes"])
+            writer.writerow({"run_id": iso(datetime.now(timezone.utc)), "period_start": facts["period"]["since"],
+                             "period_end": facts["period"]["until"], "generation_minutes": f"{generation_minutes:.3f}",
+                             "verification_minutes": "", "editing_minutes": "", "prompt_version": args.prompt_version,
+                             "reviewer": "", "notes": "Generation time auto-recorded; reviewer fills verification/editing."})
+    github_output = os.getenv("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a", encoding="utf-8") as output:
+            output.write(f"report={report_path}\n")
+            output.write(f"facts={facts_path}\n")
+    print(f"Draft: {report_path}\nFacts: {facts_path}\nGeneration minutes: {generation_minutes:.3f}")
+    print(json.dumps(facts["counts"], ensure_ascii=False))
+    return 0
 
-if __name__=='__main__':
-    main()
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except requests.HTTPError as exc:
+        print(f"GitHub/Ollama HTTP error: {exc}", file=sys.stderr)
+        raise SystemExit(2)

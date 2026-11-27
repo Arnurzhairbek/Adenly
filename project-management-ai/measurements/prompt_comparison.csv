@@ -1,0 +1,7 @@
+period_id,facts_file,prompt_version,claims_checked,material_errors,style_errors,accuracy_percent,reviewer,notes
+20261107_20261114,facts_20261107_20261114.json,v1,10,6,2,20.0,Codex audit; PM review pending,"8 of 10 atomic claims incorrect or unsupported"
+20261114_20261121,facts_20261114_20261121.json,v1,5,1,1,60.0,Codex audit; PM review pending,"2 of 5 claims incorrect or overstated"
+20261107_20261114,facts_20261107_20261114.json,v2,25,3,3,76.0,Codex audit; PM review pending,"Model confused open backlog with created-in-period count"
+20261114_20261121,facts_20261114_20261121.json,v2,15,12,0,20.0,Codex audit; PM review pending,"11 listed issues were incorrectly implied to be in progress"
+20261107_20261114,facts_20261107_20261114.json,v3,7,0,0,100.0,Codex audit; PM review pending,"Aggregate-only prompt; all 7 claims matched facts"
+20261114_20261121,facts_20261114_20261121.json,v3,7,0,0,100.0,Codex audit; PM review pending,"Aggregate-only prompt; all 7 claims matched facts"
